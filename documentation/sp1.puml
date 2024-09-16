@@ -6,7 +6,7 @@ package "services" {
     +sortByTitle(): void
     +sortByReleaseDate(): void
     +sortByGenre(): void
-    +sortByCast(cast: Object): void
+    +sortByCast(moviePerson: Object): void
     -fetchDataFromApi(apiEndpoint: String): void
     -saveMoviesToDatabase(movies: List<Movie>): void
     -movieDAO: MovieDAO
@@ -69,7 +69,7 @@ package "persistence" {
     }
 
     class MoviePersonDTO {
-   +id: int
+      +id: int
       +name: String
       +gender: int
       +knownForDepartment: String

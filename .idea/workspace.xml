@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a71957f6-c8ca-4f9a-8304-2c5f35ec1814" name="Changes" comment="Env variables for DB">
-      <change afterPath="$PROJECT_DIR$/documentation/sp1.puml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/daos/iDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/IDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/TestExample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestExample.java" afterDir="false" />
+    <list default="true" id="a71957f6-c8ca-4f9a-8304-2c5f35ec1814" name="Changes" comment="Added class diagram">
+      <change beforePath="$PROJECT_DIR$/documentation/sp1.puml" beforeDir="false" afterPath="$PROJECT_DIR$/documentation/sp1.puml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,6 +117,7 @@
       <workItem from="1725292352719" duration="3470000" />
       <workItem from="1726412933659" duration="1833000" />
       <workItem from="1726474464286" duration="1185000" />
+      <workItem from="1726479270098" duration="427000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <option name="closed" value="true" />
@@ -185,7 +183,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725294706499</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added class diagram">
+      <option name="closed" value="true" />
+      <created>1726479361904</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1726479361904</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -197,7 +203,8 @@
     </ignored-roots>
     <MESSAGE value="Init commit" />
     <MESSAGE value="Env variables for DB" />
-    <option name="LAST_COMMIT_MESSAGE" value="Env variables for DB" />
+    <MESSAGE value="Added class diagram" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added class diagram" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>
