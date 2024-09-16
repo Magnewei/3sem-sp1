@@ -1,0 +1,139 @@
+@startuml sp1
+
+package "services" {
+  class MovieList {
+    +getAllMovies(): List<Movie>
+    +sortByTitle(): void
+    +sortByReleaseDate(): void
+    +sortByGenre(): void
+    +sortByCast(cast: Object): void
+    -fetchDataFromApi(apiEndpoint: String): void
+    -saveMoviesToDatabase(movies: List<Movie>): void
+    -movieDAO: MovieDAO
+    -apiService: ApiService
+  }
+
+  interface ApiService {
+    +fetchMoviesFromApi(apiEndpoint: String): MovieListDTO
+  }
+
+  class ApiServiceImpl implements ApiService {
+    +fetchMoviesFromApi(apiEndpoint: String): MovieListDTO
+  }
+}
+
+package "persistence" {
+  package "daos" {
+    interface IDAO {
+      +save(entity: Object)
+      +delete(id: int)
+      +update(entity: Object)
+      +find(id: int): Object
+      +findAll(): List<Object>
+    }
+
+    class MovieDAO implements IDAO {
+      +save(entity: Movie)
+      +delete(id: int)
+      +update(entity: Movie)
+      +find(id: int): Movie
+      +findAll(): List<Movie>
+    }
+
+    class MoviePersonDAO implements IDAO {
+      +save(entity: MoviePerson)
+      +delete(id: int)
+      +update(entity: MoviePerson)
+      +find(id: int): MoviePerson
+      +findAll(): List<MoviePerson>
+    }
+  }
+
+  package "dtos" {
+    class MovieDTO {
+      +id: int
+      +title: String
+      +originalTitle: String
+      +overview: String
+      +originalLanguage: String
+      +posterPath: String
+      +backdropPath: String
+      +releaseDate: String
+      +popularity: double
+      +voteAverage: double
+      +voteCount: int
+      +adult: boolean
+      +video: boolean
+      +genreIds: List<int>
+      +toEntity(): Movie
+    }
+
+    class MoviePersonDTO {
+   +id: int
+      +name: String
+      +gender: int
+      +knownForDepartment: String
+      +originalName: String
+      +popularity: double
+      +profilePath: String
+      +knownFor: List<Movie>
+      +getters()
+      +setters()
+      +toEntity(): Actor
+    }
+  }
+
+  package "entities" {
+    class Movie {
+      +id: int
+      +title: String
+      +originalTitle: String
+      +overview: String
+      +originalLanguage: String
+      +posterPath: String
+      +backdropPath: String
+      +releaseDate: String
+      +popularity: double
+      +voteAverage: double
+      +voteCount: int
+      +adult: boolean
+      +video: boolean
+      +cast: List<MoviePerson>
+      +getters()
+      +setters()
+    }
+
+    class MoviePerson {
+      +id: int
+      +name: String
+      +gender: int
+      +knownForDepartment: String
+      +originalName: String
+      +popularity: double
+      +profilePath: String
+      +knownFor: List<Movie>
+      +getters()
+      +setters()
+    }
+  }
+}
+
+package "exceptions" {
+  class JpaException {
+    +JpaException(String message)
+  }
+}
+
+' Define relationships
+MovieList --> MovieDAO : Uses
+MovieList --> ApiService : Uses
+ApiServiceImpl --|> ApiService : Implements
+MovieDAO --> Movie : Manages
+MoviePersonDAO --> MoviePerson : Manages
+MovieDTO --> Movie : Maps to/from
+MoviePersonDTO --> MoviePerson : Maps to/from
+JpaException <|-- MovieDAO : Throws
+JpaException <|-- MoviePersonDAO : Throws
+Movie --> MoviePerson : Has-a
+
+@enduml

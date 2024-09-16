@@ -1,4 +1,3 @@
-import app.persistence.HibernateConfig;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,7 +12,6 @@ public class TestExample {
 
     @BeforeAll
     static void setUpAll() {
-        emfTest = HibernateConfig.getEntityManagerFactory();
     }
 
     @AfterAll
