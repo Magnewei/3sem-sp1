@@ -6,10 +6,12 @@ package "services" {
     +sortByTitle(): void
     +sortByReleaseDate(): void
     +sortByGenre(): void
-    +sortByCast(moviePerson: Object): void
+    +sortByCast(cast: Object): void
     -fetchDataFromApi(apiEndpoint: String): void
     -saveMoviesToDatabase(movies: List<Movie>): void
+    -moviePersonDAO: MoviePersonDAO
     -movieDAO: MovieDAO
+    -movies: List<Movie>
     -apiService: ApiService
   }
 
@@ -29,7 +31,7 @@ package "persistence" {
       +delete(id: int)
       +update(entity: Object)
       +find(id: int): Object
-      +findAll(): List<Object>
+      +getAll(): List<Object>
     }
 
     class MovieDAO implements IDAO {
@@ -45,7 +47,7 @@ package "persistence" {
       +delete(id: int)
       +update(entity: MoviePerson)
       +find(id: int): MoviePerson
-      +findAll(): List<MoviePerson>
+      +getAll(): List<MoviePerson>
     }
   }
 
@@ -64,14 +66,14 @@ package "persistence" {
       +voteCount: int
       +adult: boolean
       +video: boolean
-      +genreIds: List<int>
+      +genreIds: List<String>
       +toEntity(): Movie
     }
 
     class MoviePersonDTO {
       +id: int
       +name: String
-      +gender: int
+      +gender: String
       +knownForDepartment: String
       +originalName: String
       +popularity: double
@@ -79,7 +81,7 @@ package "persistence" {
       +knownFor: List<Movie>
       +getters()
       +setters()
-      +toEntity(): Actor
+      +toEntity(): MoviePerson
     }
   }
 
@@ -133,7 +135,6 @@ MoviePersonDAO --> MoviePerson : Manages
 MovieDTO --> Movie : Maps to/from
 MoviePersonDTO --> MoviePerson : Maps to/from
 JpaException <|-- MovieDAO : Throws
-JpaException <|-- MoviePersonDAO : Throws
 Movie --> MoviePerson : Has-a
 
 @enduml
