@@ -28,6 +28,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -35,6 +36,14 @@
     &quot;assignee&quot;: &quot;Magnewei&quot;
   }
 }</component>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="master" />
+        <option value="develop" />
+      </list>
+    </option>
+  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Magnewei/3sem-sp1&quot;,
@@ -119,7 +128,7 @@
       <workItem from="1726412933659" duration="1833000" />
       <workItem from="1726474464286" duration="1185000" />
       <workItem from="1726479270098" duration="2845000" />
-      <workItem from="1726506984167" duration="420000" />
+      <workItem from="1726506984167" duration="833000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <option name="closed" value="true" />
@@ -217,7 +226,23 @@
       <option name="project" value="LOCAL" />
       <updated>1726506064270</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Clean up class diagram">
+      <option name="closed" value="true" />
+      <created>1726507539952</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1726507539952</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Clean up class diagram">
+      <option name="closed" value="true" />
+      <created>1726507761525</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1726507761525</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

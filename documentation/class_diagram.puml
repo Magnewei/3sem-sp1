@@ -11,6 +11,7 @@ Postgres Database
 '' Styling
 skinparam ArrowThickness 3
 skinparam linetype ortho
+skinparam ArrowColor Red
 
 ''
 
