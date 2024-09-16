@@ -143,6 +143,10 @@ package "exceptions" {
   class JpaException {
     +JpaException(String message)
   }
+
+  class ApiRetrievalException {
+      +ApiRetrievalException(String message)
+    }
 }
 
 
@@ -158,6 +162,7 @@ MovieDTO --> Movie : Maps to/from
 MoviePersonDTO --> MoviePerson : Maps to/from
 JpaException <|-- MovieDAO : Throws
 JpaException <|-- MoviePersonDAO : Throws
+ApiRetrievalException <|-- ApiService : Throws
 Movie --> MoviePerson : Has-a
 
 @enduml
