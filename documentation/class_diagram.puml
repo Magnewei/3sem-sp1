@@ -16,11 +16,12 @@ package "services" {
   }
 
   interface ApiService {
-    +fetchMoviesFromApi(apiEndpoint: String): MovieListDTO
+    +fetchMoviesFromApi(apiEndpoint: String): List<MovieDTO>
+    -API_KEY: String
   }
 
   class ApiServiceImpl implements ApiService {
-    +fetchMoviesFromApi(apiEndpoint: String): MovieListDTO
+    +fetchMoviesFromApi(apiEndpoint: String): List<MovieDTO>
   }
 }
 
@@ -83,6 +84,10 @@ package "persistence" {
       +setters()
       +toEntity(): MoviePerson
     }
+  }
+
+  class HibernateConfig {
+    +denDanskeMetode()
   }
 
   package "entities" {
