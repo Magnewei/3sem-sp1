@@ -1,5 +1,19 @@
 @startuml sp1
 
+component TMDB_API [
+The Movie Database API
+]
+
+database Database [
+Postgres Database
+]
+
+'' Styling
+skinparam ArrowThickness 3
+skinparam linetype ortho
+
+''
+
 package "services" {
   class MovieList {
     +getAllMovies(): List<Movie>
@@ -131,7 +145,10 @@ package "exceptions" {
   }
 }
 
+
 ' Define relationships
+TMDB_API --> ApiService : Uses
+IDAO --> Database : Manages
 MovieList --> MovieDAO : Uses
 MovieList --> ApiService : Uses
 ApiServiceImpl --|> ApiService : Implements
@@ -140,6 +157,7 @@ MoviePersonDAO --> MoviePerson : Manages
 MovieDTO --> Movie : Maps to/from
 MoviePersonDTO --> MoviePerson : Maps to/from
 JpaException <|-- MovieDAO : Throws
+JpaException <|-- MoviePersonDAO : Throws
 Movie --> MoviePerson : Has-a
 
 @enduml
