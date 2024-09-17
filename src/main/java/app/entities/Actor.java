@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Actor extends MoviePerson {
-    private String character;
-    private int order;
+
+
 }
+
