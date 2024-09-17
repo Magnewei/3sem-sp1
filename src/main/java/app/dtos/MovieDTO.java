@@ -1,14 +1,16 @@
+
 package app.dtos;
 
 import app.entities.MoviePerson;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * Purpose:
- *
- * @Author: Anton Friis Stengaard
- */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MovieDTO {
     private int id;
     private String title;
