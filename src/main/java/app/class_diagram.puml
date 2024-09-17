@@ -28,6 +28,7 @@ package "services" {
     -movieDAO: MovieDAO
     -movies: List<Movie>
     -apiService: ApiService
+    +printMovieList(): void
   }
 
   interface ApiService {
@@ -35,14 +36,11 @@ package "services" {
     -API_KEY: String
   }
 
-  class ApiServiceImpl implements ApiService {
-    +fetchMoviesFromApi(apiEndpoint: String): List<MovieDTO>
-  }
 }
 
 package "persistence" {
   package "daos" {
-    interface IDAO {
+    interface GenericDAO {
       +save(entity: Object)
       +delete(id: int)
       +update(entity: <T>)
@@ -51,7 +49,7 @@ package "persistence" {
       -toEntity(DTO: <T>): <T>
     }
 
-    class MovieDAO implements IDAO {
+    class MovieDAO implements GenericDAO {
       +save(entity: MovieDTO)
       +delete(id: int)
       +update(entity: MovieDTO)
@@ -60,7 +58,7 @@ package "persistence" {
       -toEntity(DTO: MovieDTO): Movie
     }
 
-    class MoviePersonDAO implements IDAO {
+    class MoviePersonDAO implements GenericDAO {
       +save(entity: MoviePersonDTO): void
       +delete(id: int): void
       +update(entity: MoviePerson): void
@@ -150,10 +148,9 @@ package "exceptions" {
 
 ' Define relationships
 TMDB_API --> ApiService : Uses
-IDAO --> Database : Manages
+GenericDAO --> Database : Manages
 MovieList --> MovieDAO : Uses
 MovieList --> ApiService : Uses
-ApiServiceImpl --|> ApiService : Implements
 MovieDAO --> Movie : Manages
 MoviePersonDAO --> MoviePerson : Manages
 MovieDTO --> Movie : Maps to/from
