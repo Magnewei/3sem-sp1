@@ -1,9 +1,10 @@
 package app.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -13,8 +14,14 @@ import java.util.List;
  * @Author: Anton Friis Stengaard
  */
 @Entity
+@Data
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
+@Table(name = "directors")
 public class Director {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "adult",nullable = false)
