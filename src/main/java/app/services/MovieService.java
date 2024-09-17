@@ -1,6 +1,8 @@
 package app.services;
 
 import app.dtos.MovieDTO;
+import app.entities.Actor;
+import app.entities.Director;
 import app.entities.Movie;
 import app.entities.MoviePerson;
 import app.enums.HibernateConfigState;
@@ -37,7 +39,7 @@ public class MovieService {
     public List<MovieDTO> sortByTitle() {
         List<MovieDTO> allMovies = movieDAO.getAll();
         allMovies.stream()
-                .sorted((Comparator.comparing(MovieDTO::getTitle)))
+                .sorted((Comparator.comparing(MovieDTO::getOriginalTitle)))
                 .forEach(System.out::println);
         return allMovies;
     }
@@ -50,18 +52,26 @@ public class MovieService {
         return allmovies;
     }
 
-    public List<MovieDTO> sortByGenre() {
+   /* public List<MovieDTO> sortByGenre() {
         List<MovieDTO> allmovies = movieDAO.getAll();
         allmovies.stream()
                 .sorted((Comparator.comparing(MovieDTO::getGenre)))
                 .forEach(System.out::println);
         return allmovies;
-    }
+    }*/
 
-    public List<MovieDTO> sortByCast(MoviePerson person) {
+    public List<MovieDTO> sortByActor(Actor actor) {
         List<MovieDTO> allMovies = movieDAO.getAll();
         allMovies.stream()
-                .filter(m -> m.getCast().contains(person))
+                .filter(m -> m.getCast().contains(actor))
+                .forEach(System.out::println);
+        return allMovies;
+    }
+
+    public List<MovieDTO> sortByDirector(Director director) {
+        List<MovieDTO> allMovies = movieDAO.getAll();
+        allMovies.stream()
+                .filter(m -> m.getCast().contains(director))
                 .forEach(System.out::println);
         return allMovies;
     }
