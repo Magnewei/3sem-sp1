@@ -13,7 +13,7 @@ import java.util.List;
  * @Author: Anton Friis Stengaard
  */
 @Entity
-public class Actor {
+public class Director {
     @Id
     private int id;
 
@@ -32,6 +32,6 @@ public class Actor {
     @Column(name = "original_name",nullable = false)
     private String originalName;
 
-    @ManyToMany(mappedBy = "cast")
+    @ManyToMany(mappedBy = "directors")
     private List<Movie> knownFor;
 }
