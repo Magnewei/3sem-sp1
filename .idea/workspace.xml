@@ -4,21 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a71957f6-c8ca-4f9a-8304-2c5f35ec1814" name="Changes" comment="Clean up class diagram">
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/dtos/MovieDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/dtos/MoviePersonDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/entities/Movie.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/entities/MoviePerson.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/exceptions/ApiException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MovieDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MoviePersonDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/services/ApiService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/services/ApiServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/services/MovieService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="a71957f6-c8ca-4f9a-8304-2c5f35ec1814" name="Changes" comment="Classes created">
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/dtos/ActorDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/dtos/DirectorDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/entities/Actor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/entities/Director.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/daos/IDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/GenericDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/entities/Movie.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/MovieDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dtos/MovieDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/MoviePersonDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/Movie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/MoviePerson.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,9 +23,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
         <option value="Exception" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -78,7 +73,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "lavKlasser",
+    "git-widget-placeholder": "fixDTOs",
     "go.import.settings.migrated": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/magnusnorgaardweihager/Documents/GitHub/CPH-BUSINESS/HibernateTemplate",

@@ -1,6 +1,7 @@
 package app.dtos;
 
 import app.entities.Movie;
+import lombok.Data;
 
 import java.util.List;
 
@@ -9,14 +10,13 @@ import java.util.List;
  *
  * @Author: Anton Friis Stengaard
  */
-public class MoviePersonDTO {
+@Data
+public class DirectorDTO {
     private int id;
     private boolean adult;
     private String name;
     private String gender;
     private String knownForDepartment;
     private String originalName;
-    private double popularity;
-    private String profilePath;
     private List<Movie> knownFor;
 }

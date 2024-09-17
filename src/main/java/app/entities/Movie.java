@@ -1,20 +1,47 @@
 package app.entities;
 
+import jakarta.persistence.*;
+import lombok.Data;
+
 import java.util.List;
 
+@Entity
+@Data
 public class Movie {
+    @Id
     private int id;
-    private String title;
+
+    @Column(name = "original_title", nullable = false)
     private String originalTitle;
+
+    @Column(name = "overview", nullable = false)
     private String overview;
-    private String originalLanguage;
-    private String posterPath;
-    private String backdropPath;
+
+    @Column(name = "release_date", nullable = false)
     private String releaseDate;
-    private double popularity;
+
+    @Column(name = "vote_average", nullable = false)
     private double voteAverage;
+
+    @Column(name = "adult", nullable = false)
     private boolean adult;
-    private boolean video;
-    private List<MoviePerson> cast;
+
+    @ManyToMany
+    @JoinTable(
+            name = "movie_actor",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id")
+    )
+    private List<Actor> cast;
+
+    @ManyToMany
+    @JoinTable(
+            name = "movie_director",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "director_id")
+    )
+    private List<Director> directors;
+
+    @ElementCollection
     private List<Integer> genreIds;
 }
