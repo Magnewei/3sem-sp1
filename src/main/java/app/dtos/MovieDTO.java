@@ -2,7 +2,6 @@ package app.dtos;
 
 import app.entities.Actor;
 import app.entities.Director;
-import app.entities.MoviePerson;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
