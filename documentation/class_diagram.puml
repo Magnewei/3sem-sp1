@@ -11,7 +11,7 @@ Postgres Database
 '' Styling
 skinparam ArrowThickness 3
 skinparam linetype ortho
-skinparam ArrowColor Red
+skinparam ArrowColor Green
 
 ''
 
@@ -21,9 +21,9 @@ package "services" {
     +sortByTitle(): void
     +sortByReleaseDate(): void
     +sortByGenre(): void
-    +sortByCast(cast: Object): void
+    +sortByCast(object: MoviePerson): void
     -fetchDataFromApi(apiEndpoint: String): void
-    -saveMoviesToDatabase(movies: List<Movie>): void
+    -saveMoviesToDatabase(movies: List<MovieDTO>): void
     -moviePersonDAO: MoviePersonDAO
     -movieDAO: MovieDAO
     -movies: List<Movie>
@@ -45,97 +45,92 @@ package "persistence" {
     interface IDAO {
       +save(entity: Object)
       +delete(id: int)
-      +update(entity: Object)
-      +find(id: int): Object
-      +getAll(): List<Object>
+      +update(entity: <T>)
+      +find(id: int): <T>
+      +getAll(): List<T>
+      -toEntity(DTO: <T>): <T>
     }
 
     class MovieDAO implements IDAO {
-      +save(entity: Movie)
+      +save(entity: MovieDTO)
       +delete(id: int)
-      +update(entity: Movie)
+      +update(entity: MovieDTO)
       +find(id: int): Movie
       +findAll(): List<Movie>
+      -toEntity(DTO: MovieDTO): Movie
     }
 
     class MoviePersonDAO implements IDAO {
-      +save(entity: MoviePerson)
-      +delete(id: int)
-      +update(entity: MoviePerson)
+      +save(entity: MoviePersonDTO): void
+      +delete(id: int): void
+      +update(entity: MoviePerson): void
       +find(id: int): MoviePerson
       +getAll(): List<MoviePerson>
+      -toEntity(DTO: MoviePersonDTO): MoviePerson
     }
   }
 
   package "dtos" {
     class MovieDTO {
-      +id: int
-      +title: String
-      +originalTitle: String
-      +overview: String
-      +originalLanguage: String
-      +posterPath: String
-      +backdropPath: String
-      +releaseDate: String
-      +popularity: double
-      +voteAverage: double
-      +voteCount: int
-      +adult: boolean
-      +video: boolean
-      +genreIds: List<String>
-      +toEntity(): Movie
+      -id: int
+      -title: String
+      -originalTitle: String
+      -overview: String
+      -mediaType: String
+      -originalLanguage: String
+      -posterPath: String
+      -backdropPath: String
+      -releaseDate: String
+      -popularity: double
+      -voteAverage: double
+      -voteCount: int
+      -adult: boolean
+      -video: boolean
+      -genreIds: List<Integer>
     }
 
     class MoviePersonDTO {
-      +id: int
-      +name: String
-      +gender: String
-      +knownForDepartment: String
-      +originalName: String
-      +popularity: double
-      +profilePath: String
-      +knownFor: List<Movie>
-      +getters()
-      +setters()
-      +toEntity(): MoviePerson
+      -id: int
+      -adult: boolean
+      -name: String
+      -gender: String
+      -knownForDepartment: String
+      -originalName: String
+      -popularity: double
+      -profilePath: String
+      -knownFor: List<Movie>
     }
-  }
-
-  class HibernateConfig {
-    +denDanskeMetode()
   }
 
   package "entities" {
     class Movie {
-      +id: int
-      +title: String
-      +originalTitle: String
-      +overview: String
-      +originalLanguage: String
-      +posterPath: String
-      +backdropPath: String
-      +releaseDate: String
-      +popularity: double
-      +voteAverage: double
-      +voteCount: int
-      +adult: boolean
-      +video: boolean
-      +cast: List<MoviePerson>
-      +getters()
-      +setters()
+      -id: int
+      -title: String
+      -originalTitle: String
+      -overview: String
+      -originalLanguage: String
+      -posterPath: String
+      -backdropPath: String
+      -releaseDate: String
+      -popularity: double
+      -voteAverage: double
+      -voteCount: int
+      -adult: boolean
+      -mediaType: String
+      -cast: List<MoviePerson>
+      -genreIds: List<Integer>
     }
 
     class MoviePerson {
-      +id: int
-      +name: String
-      +gender: int
-      +knownForDepartment: String
-      +originalName: String
-      +popularity: double
-      +profilePath: String
-      +knownFor: List<Movie>
-      +getters()
-      +setters()
+      -adult: boolean
+      -id: int
+      -name: String
+      -gender: int
+      -knownForDepartment: String
+      -originalName: String
+      -popularity: double
+      -profilePath: String
+      -knownFor: List<Movie>
     }
   }
 }
@@ -145,8 +140,8 @@ package "exceptions" {
     +JpaException(String message)
   }
 
-  class ApiRetrievalException {
-      +ApiRetrievalException(String message)
+  class ApiException {
+      +ApiException(String message)
     }
 }
 
@@ -163,7 +158,7 @@ MovieDTO --> Movie : Maps to/from
 MoviePersonDTO --> MoviePerson : Maps to/from
 JpaException <|-- MovieDAO : Throws
 JpaException <|-- MoviePersonDAO : Throws
-ApiRetrievalException <|-- ApiService : Throws
-Movie --> MoviePerson : Has-a
+ApiException <|-- ApiService : Throws
+Movie --> MoviePerson
 
 @enduml
