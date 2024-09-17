@@ -1,9 +1,7 @@
 package app.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
@@ -13,6 +11,8 @@ import java.util.List;
  * @Author: Anton Friis Stengaard
  */
 @Entity
+@Data
+@Table(name = "director")
 public class Director {
     @Id
     private int id;
