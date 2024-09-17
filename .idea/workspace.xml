@@ -5,9 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a71957f6-c8ca-4f9a-8304-2c5f35ec1814" name="Changes" comment="Clean up class diagram">
-      <change afterPath="$PROJECT_DIR$/src/main/java/app/persistence/entities/Movie.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/dtos/MovieDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/dtos/MoviePersonDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/entities/Movie.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/entities/MoviePerson.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/exceptions/ApiException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MovieDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MoviePersonDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/services/ApiService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/services/ApiServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/app/services/MovieService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/documentation/class_diagram.puml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/class_diagram.puml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/daos/IDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/GenericDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/entities/Movie.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,15 +28,16 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
+        <option value="Exception" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="uml_generate_classes" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -37,14 +49,6 @@
     &quot;assignee&quot;: &quot;Magnewei&quot;
   }
 }</component>
-  <component name="GithubProjectSettings">
-    <option name="branchProtectionPatterns">
-      <list>
-        <option value="master" />
-        <option value="develop" />
-      </list>
-    </option>
-  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Magnewei/3sem-sp1&quot;,
@@ -74,7 +78,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "lavKlasser",
     "go.import.settings.migrated": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/magnusnorgaardweihager/Documents/GitHub/CPH-BUSINESS/HibernateTemplate",
