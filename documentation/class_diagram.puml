@@ -86,6 +86,7 @@ package "persistence" {
       -voteCount: int
       -adult: boolean
       -video: boolean
+      -cast: List<MoviePerson>
       -genreIds: List<Integer>
     }
 
@@ -117,6 +118,7 @@ package "persistence" {
       -voteCount: int
       -adult: boolean
       -mediaType: String
+      -movie: boolean
       -cast: List<MoviePerson>
       -genreIds: List<Integer>
     }
