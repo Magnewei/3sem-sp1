@@ -1,12 +1,14 @@
 package app.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
-/**
- * Purpose:
- *
- * @Author: Anton Friis Stengaard
- */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class MoviePerson {
     private boolean adult;
     private int id;
