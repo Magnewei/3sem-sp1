@@ -7,6 +7,7 @@ import app.persistence.daos.MovieDAO;
 import app.persistence.daos.MoviePersonDAO;
 import lombok.NoArgsConstructor;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -32,25 +33,36 @@ public class MovieService {
         return instance;
     }
 
-
-    public void getAllMovies() {
-        // Fetch all movies
+    public List<MovieDTO> sortByTitle() {
+        List<MovieDTO> allMovies = movieDAO.getAll();
+        allMovies.stream()
+                .sorted((Comparator.comparing(MovieDTO::getTitle)))
+                .forEach(System.out::println);
+        return allMovies;
     }
 
-    public void sortByTitle() {
-        // Sort movies by title
+    public List<MovieDTO> sortByReleaseDate() {
+        List<MovieDTO> allmovies = movieDAO.getAll();
+        allmovies.stream()
+                .sorted(Comparator.comparing(MovieDTO::getReleaseDate))
+                .forEach(System.out::println);
+        return allmovies;
     }
 
-    public void sortByReleaseDate() {
-        // Sort movies by release date
+    public List<MovieDTO> sortByGenre() {
+        List<MovieDTO> allmovies = movieDAO.getAll();
+        allmovies.stream()
+                .sorted((Comparator.comparing(MovieDTO::getGenre)))
+                .forEach(System.out::println);
+        return allmovies;
     }
 
-    public void sortByGenre() {
-        // Sort movies by genre
-    }
-
-    public void sortByCast(MoviePerson person) {
-        // Sort movies by cast
+    public List<MovieDTO> sortByCast(MoviePerson person) {
+        List<MovieDTO> allMovies = movieDAO.getAll();
+        allMovies.stream()
+                .filter(m -> m.getCast().contains(person))
+                .forEach(System.out::println);
+        return allMovies;
     }
 
     public void fetchDataFromApi(String endpoint) {
