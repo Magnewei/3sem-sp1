@@ -1,15 +1,22 @@
 package app.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Data
-@Table(name = "movie")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Table(name = "movies")
 public class Movie {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "original_title", nullable = false)

@@ -1,7 +1,10 @@
 package app.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -12,9 +15,13 @@ import java.util.List;
  */
 @Entity
 @Data
-@Table(name = "director")
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
+@Table(name = "directors")
 public class Director {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "adult",nullable = false)
