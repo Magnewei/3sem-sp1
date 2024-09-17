@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @Author: Anton Friis Stengaard
  */
-public class MoviePerson {
+public abstract class MoviePerson {
     private boolean adult;
     private int id;
     private String name;

@@ -18,4 +18,18 @@ public class ApiServiceImpl implements ApiService {
         // Implementation to fetch movies from the API
         return new ArrayList<>();
     }
+
+    @Override
+    public List<MovieDTO> fetchActorsFromApiEndPoint(String endpoint) {
+        // Implementation to fetch movies from the API
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<MovieDTO> fetchDirectorsFromApiEndPoint(String endpoint) {
+        // Implementation to fetch movies from the API
+        return new ArrayList<>();
+    }
+
+
 }
