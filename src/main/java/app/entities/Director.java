@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import lombok.Data;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @Author: Anton Friis Stengaard
  */
 @Entity
+@Data
 public class Director {
     @Id
     private int id;
@@ -34,4 +36,6 @@ public class Director {
 
     @ManyToMany(mappedBy = "directors")
     private List<Movie> knownFor;
+
+
 }

@@ -21,7 +21,7 @@ public class MovieDTO {
     private double releaseDate;
     private double voteAverage;
     private boolean adult;
-    private List<Actor> cast;
-    private List<Director> directors;
+    private List<ActorDTO> cast;
+    private List<DirectorDTO> directors;
     private List<Integer> genreIds;
 }

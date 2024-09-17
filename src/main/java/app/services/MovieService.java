@@ -3,12 +3,12 @@ package app.services;
 import app.dtos.MovieDTO;
 import app.entities.Actor;
 import app.entities.Director;
-import app.entities.MoviePerson;
 import app.persistence.daos.MovieDAO;
-import app.persistence.daos.MoviePersonDAO;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.NoArgsConstructor;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -21,18 +21,16 @@ import java.util.concurrent.ExecutorService;
 @NoArgsConstructor
 public class MovieService {
     private static EntityManagerFactory emf;
-    private static MoviePersonDAO moviePersonDAO;
     private static MovieDAO movieDAO;
     private static MovieService instance;
-    private static ApiServiceImpl apiService;
+    private static ApiService apiService;
 
     public static synchronized MovieService getInstance(ExecutorService executorService, EntityManagerFactory entityManagerFactory) {
         if (instance == null) {
             instance = new MovieService();
             emf = entityManagerFactory;
             movieDAO = new MovieDAO(emf);
-            moviePersonDAO = new MoviePersonDAO(emf);
-            apiService = ApiServiceImpl.getInstance(executorService);
+            apiService = ApiService.getInstance(executorService);
         }
 
         return instance;
@@ -41,7 +39,7 @@ public class MovieService {
     public List<MovieDTO> sortByTitle() {
         List<MovieDTO> allMovies = movieDAO.getAll();
         allMovies.stream()
-                .sorted((Comparator.comparing(MovieDTO::getTitle)))
+                .sorted((Comparator.comparing(MovieDTO::getOriginalTitle)))
                 .forEach(System.out::println);
         return allMovies;
     }
@@ -53,7 +51,7 @@ public class MovieService {
                 .forEach(System.out::println);
         return allmovies;
     }
-
+    /*
     public List<MovieDTO> sortByGenre() {
         List<MovieDTO> allmovies = movieDAO.getAll();
         allmovies.stream()
@@ -61,6 +59,8 @@ public class MovieService {
                 .forEach(System.out::println);
         return allmovies;
     }
+    */
+
 
     public List<MovieDTO> sortByActor(Actor actor) {
         List<MovieDTO> allMovies = movieDAO.getAll();
@@ -81,8 +81,18 @@ public class MovieService {
     }
 
 
-    public void fetchDataFromApi(String endpoint) {
-        // Fetch data from API and save to database
+    public void fetchDataFromApi() {
+        List<MovieDTO> movies;
+        try {
+            movies = apiService.fetchMoviesFromApiEndpoint(1);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(movies);
     }
 
     public void saveMoviesToDatabase(List<MovieDTO> movies) {
