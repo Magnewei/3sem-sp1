@@ -1,5 +1,7 @@
 package app.persistence;
 
+import app.entities.Movie;
+import app.entities.MoviePerson;
 import app.enums.HibernateConfigState;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.NoArgsConstructor;
@@ -16,8 +18,8 @@ public class HibernateConfig {
     private static EntityManagerFactory entityManagerFactory;
 
     private static void getAnnotationConfiguration(Configuration configuration) {
-        // add annotated classes --- remember to add new entities here
-        //configuration.addAnnotatedClass(Package.class);
+        configuration.addAnnotatedClass(Movie.class);
+        configuration.addAnnotatedClass(MoviePerson.class);
     }
 
     private static EntityManagerFactory getEntityManagerFactory(Configuration configuration, Properties props) {
