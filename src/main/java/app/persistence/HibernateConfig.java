@@ -1,7 +1,8 @@
 package app.persistence;
 
+import app.entities.Actor;
+import app.entities.Director;
 import app.entities.Movie;
-import app.entities.MoviePerson;
 import app.enums.HibernateConfigState;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,8 @@ public class HibernateConfig {
 
     private static void getAnnotationConfiguration(Configuration configuration) {
         configuration.addAnnotatedClass(Movie.class);
-        configuration.addAnnotatedClass(MoviePerson.class);
+        configuration.addAnnotatedClass(Actor.class);
+        configuration.addAnnotatedClass(Director.class);
     }
 
     private static EntityManagerFactory getEntityManagerFactory(Configuration configuration, Properties props) {
