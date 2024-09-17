@@ -10,6 +10,13 @@
       <change afterPath="$PROJECT_DIR$/src/main/java/app/entities/Actor.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/app/entities/Director.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/HibernateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/HibernateConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MovieDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MovieDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MoviePersonDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MoviePersonDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/ApiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/ApiServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/ApiServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/MovieService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/MovieDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dtos/MovieDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/MoviePersonDTO.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/Movie.java" afterDir="false" />
@@ -44,6 +51,14 @@
     &quot;assignee&quot;: &quot;Magnewei&quot;
   }
 }</component>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="master" />
+        <option value="develop" />
+      </list>
+    </option>
+  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Magnewei/3sem-sp1&quot;,
@@ -73,7 +88,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "fixDTOs",
+    "git-widget-placeholder": "master",
     "go.import.settings.migrated": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/magnusnorgaardweihager/Documents/GitHub/CPH-BUSINESS/HibernateTemplate",

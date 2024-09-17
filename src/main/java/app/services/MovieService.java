@@ -3,13 +3,17 @@ package app.services;
 import app.dtos.MovieDTO;
 import app.entities.Movie;
 import app.entities.MoviePerson;
+import app.enums.HibernateConfigState;
+import app.persistence.HibernateConfig;
 import app.persistence.daos.MovieDAO;
 import app.persistence.daos.MoviePersonDAO;
+import jakarta.persistence.EntityManagerFactory;
 import lombok.NoArgsConstructor;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Purpose:
@@ -18,13 +22,10 @@ import java.util.concurrent.ExecutorService;
  */
 @NoArgsConstructor
 public class MovieService {
-    private static ExecutorService executorService;
-    private String apiKey = System.getenv("TMDB_API_KEY");;
-    private static MoviePersonDAO moviePersonDAO;
-    private static MovieDAO movieDAO;
-    private static List<Movie> movies;
+    private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(HibernateConfigState.TEST);
+    private static final MoviePersonDAO moviePersonDAO = new MoviePersonDAO(emf);
+    private static final MovieDAO movieDAO = new MovieDAO(emf);
     private static MovieService instance;
-
 
     public static MovieService getInstance() {
         if (instance == null) {
