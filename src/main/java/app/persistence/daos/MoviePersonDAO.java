@@ -17,6 +17,10 @@ import java.util.List;
 public class MoviePersonDAO implements GenericDAO<MoviePersonDTO, MoviePerson> {
     private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(HibernateConfigState.TEST);
 
+    public MoviePersonDAO(EntityManagerFactory emf) {
+        MoviePersonDAO.emf = emf;
+    }
+
     @Override
     public void create(MoviePersonDTO moviePersonDTO) {
         MoviePerson moviePerson = toEntity(moviePersonDTO);

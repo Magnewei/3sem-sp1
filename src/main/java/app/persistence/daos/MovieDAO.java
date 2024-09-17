@@ -16,7 +16,11 @@ import java.util.List;
  * @Author: Anton Friis Stengaard
  */
 public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
-    private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(HibernateConfigState.TEST);
+    private static EntityManagerFactory emf;
+
+    public MovieDAO(EntityManagerFactory emf) {
+        MovieDAO.emf = emf;
+    }
 
     @Transactional
     @Override

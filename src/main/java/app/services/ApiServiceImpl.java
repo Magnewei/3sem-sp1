@@ -1,17 +1,22 @@
 package app.services;
 
 import app.dtos.MovieDTO;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Purpose:
  *
  * @Author: Anton Friis Stengaard
  */
+@NoArgsConstructor
 public class ApiServiceImpl implements ApiService {
-    private static final String API_KEY = "your_api_key";
+    private static final String API_KEY = System.getenv("TMDB_API_KEY");
+    private final ExecutorService pool = Executors.newCachedThreadPool();
 
     @Override
     public List<MovieDTO> fetchMoviesFromApiEndpoint(String endpoint) {
