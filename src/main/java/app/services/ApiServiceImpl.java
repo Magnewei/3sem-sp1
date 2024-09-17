@@ -15,8 +15,22 @@ import java.util.concurrent.Executors;
  */
 @NoArgsConstructor
 public class ApiServiceImpl implements ApiService {
+    private static ApiServiceImpl instance;
     private static final String API_KEY = System.getenv("TMDB_API_KEY");
-    private final ExecutorService pool = Executors.newCachedThreadPool();
+    private static ExecutorService pool;
+
+
+    public static ApiServiceImpl getInstance(ExecutorService executorService) {
+        if (instance == null) {
+            instance = new ApiServiceImpl();
+            pool = executorService;
+        }
+
+        return instance;
+    }
+
+
+
 
     @Override
     public List<MovieDTO> fetchMoviesFromApiEndpoint(String endpoint) {
