@@ -61,6 +61,7 @@ public class ApiService {
                         movieDTO.setVoteAverage(movie.getVoteAverage());
                         movieDTO.setGenreIds(movie.getGenreIds());
 
+
                         try {
                             // Fetch cast and directors
                             HttpRequest castRequest = HttpRequest.newBuilder()
@@ -133,7 +134,7 @@ public class ApiService {
                     }, pool))
                     .toList();
 
-            allMovies.addAll(futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+            allMovies.addAll(futures.stream().map(CompletableFuture::join).toList());
             currentPage++;
         }
 

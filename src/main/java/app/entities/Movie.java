@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "movies")
 public class Movie {
 
     @Id
@@ -21,7 +22,7 @@ public class Movie {
     private String originalTitle;
 
     @Column(name = "overview")
-    private String overview;
+    private String overview = "";
 
     @Column(name = "release_date", nullable = false)
     private String releaseDate;
@@ -30,25 +31,20 @@ public class Movie {
     private double voteAverage;
 
     @ManyToMany
-    /*
     @JoinTable(
+            name = "actors",
             joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "actor_id")
-    )
-
-     */
-    private List<Actor> actor;
+            inverseJoinColumns = @JoinColumn(name = "actor_id"))
+    @Column(name = "actors")
+    private List<Actor> actors;
 
     @ManyToMany
-    /*
     @JoinTable(
+            name = "directors",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "director_id")
     )
-
-     */
+    @Column(name = "directors")
     private List<Director> directors;
 
-    @ElementCollection
-    private List<Integer> genreIds;
 }

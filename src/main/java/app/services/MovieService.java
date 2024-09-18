@@ -3,6 +3,7 @@ package app.services;
 import app.dtos.MovieDTO;
 import app.entities.Actor;
 import app.entities.Director;
+import app.entities.Movie;
 import app.enums.HibernateConfigState;
 import app.exceptions.ApiException;
 import app.exceptions.JpaException;
@@ -24,15 +25,16 @@ import java.util.concurrent.ExecutorService;
  */
 @NoArgsConstructor
 public class MovieService {
-    private static EntityManagerFactory entityManagerFactory = HibernateConfig.getEntityManagerFactoryConfig(HibernateConfigState.NORMAL);
+    private static EntityManagerFactory entityManagerFactory;
     private static MovieDAO movieDAO;
     private static MovieService instance;
     private static ApiService apiService;
 
 
-    public static synchronized MovieService getInstance(ExecutorService executorService) {
+    public static synchronized MovieService getInstance(ExecutorService executorService, EntityManagerFactory emf) {
         if (instance == null) {
             instance = new MovieService();
+            entityManagerFactory = emf;
             movieDAO = new MovieDAO(entityManagerFactory);
             apiService = ApiService.getInstance(executorService);
         }
@@ -77,7 +79,10 @@ public class MovieService {
     public void saveMoviesToDatabase() {
         try {
             List<MovieDTO> movies = apiService.fetchMoviesFromApiEndpoint(1);
-            movies.forEach(movieDAO::create);
+
+             for(MovieDTO movie : movies) {
+                movieDAO.create(movie);
+            }
 
         } catch (URISyntaxException | InterruptedException | IOException e) {
             throw new JpaException("Could not persist movies to the database.");

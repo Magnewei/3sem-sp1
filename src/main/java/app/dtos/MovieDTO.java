@@ -26,10 +26,8 @@ public class MovieDTO {
     @JsonProperty("overview")
     private String overview;
 
-    @JsonIgnore
     private List<ActorDTO> cast;
 
-    @JsonIgnore
     private List<DirectorDTO> directors;
 
     @JsonProperty("genre_ids")

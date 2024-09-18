@@ -25,7 +25,7 @@ public class Actor {
     @Column(name = "gender",nullable = false)
     private int gender;
 
-    @ManyToMany(mappedBy = "actor")
+    @ManyToMany(mappedBy = "actors")
     private List<Movie> knownFor;
 
 }

@@ -7,6 +7,7 @@ import app.entities.Actor;
 import app.entities.Director;
 import app.entities.Movie;
 import app.exceptions.JpaException;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.transaction.Transactional;
 
@@ -20,24 +21,29 @@ import java.util.stream.Collectors;
  * @Author: Anton Friis Stengaard
  */
 public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
-    private static EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
 
-    public MovieDAO(EntityManagerFactory emf) {
-        MovieDAO.emf = emf;
+    public MovieDAO(EntityManagerFactory entityManagerFactory) {
+        emf = entityManagerFactory;
     }
 
-    @Transactional
     @Override
     public void create(MovieDTO movieDTO) {
         Movie movie = toEntity(movieDTO);
 
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
+            prePersistActors(movie, em);
+            prePersistDirectors(movie, em);
             em.persist(movie);
             em.getTransaction().commit();
 
+        } catch (Exception e) {
+            throw new JpaException("Could not create movie.");
         }
     }
+
+
 
     @Transactional
     @Override
@@ -103,7 +109,6 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         movie.setId(dto.getId());
         movie.setOriginalTitle(dto.getOriginalTitle());
         movie.setReleaseDate(dto.getReleaseDate().toString());
-        movie.setGenreIds(dto.getGenreIds());
         movie.setOverview(dto.getOverview());
         movie.setVoteAverage(dto.getVoteAverage());
 
@@ -140,9 +145,8 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         dto.setId(movie.getId());
         dto.setOriginalTitle(movie.getOriginalTitle());
         dto.setReleaseDate(LocalDate.parse(movie.getReleaseDate()));
-        dto.setCast(movie.getActor().stream().map(this::toActorDTO).collect(Collectors.toList()));
+        dto.setCast(movie.getActors().stream().map(this::toActorDTO).collect(Collectors.toList()));
         dto.setDirectors(movie.getDirectors().stream().map(this::toDirectorDTO).collect(Collectors.toList()));
-        dto.setGenreIds(movie.getGenreIds());
         dto.setOverview(movie.getOverview());
         dto.setVoteAverage(movie.getVoteAverage());
 
@@ -170,6 +174,21 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         dto.setGender(director.getGender());
         dto.setKnownFor(director.getKnownFor().stream().map(this::toDTO).collect(Collectors.toList()));
         return dto;
+    }
+
+
+    private void prePersistActors(Movie movie, EntityManager em) {
+        movie.getActors().forEach(actor -> {
+            em.persist(actor);
+            em.getTransaction().commit();
+        });
+    }
+
+    private void prePersistDirectors(Movie movie, EntityManager em) {
+        movie.getDirectors().forEach(director -> {
+                em.persist(director);
+                em.getTransaction().commit();
+        });
     }
 
 }
