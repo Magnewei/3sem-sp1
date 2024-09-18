@@ -96,7 +96,7 @@ public class ApiService {
                                     actor.setKnownFor(knownForMovies);
                                     actors.add(actor);
                                 }
-                                movieDTO.setCast(actors);
+                                movieDTO.setActors(actors);
                             }
 
                             // Extract director from the crew

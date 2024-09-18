@@ -32,14 +32,22 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         Movie movie = toEntity(movieDTO);
 
         try (var em = emf.createEntityManager()) {
+            if (movieDTO.getActors() != null)
+                movie.addActors(movieDTO.getActors().stream().map(this::toActor).collect(Collectors.toList()));
+
+
+            if (movieDTO.getDirectors() != null)
+                movie.addDirectors((movieDTO.getDirectors().stream().map(this::toDirector).collect(Collectors.toList())));
+
+
             em.getTransaction().begin();
-            prePersistActors(movie, em);
-            prePersistDirectors(movie, em);
             em.persist(movie);
             em.getTransaction().commit();
 
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
+            System.err.println(e.getMessage());
             throw new JpaException("Could not create movie.");
+
         }
     }
 
@@ -111,6 +119,8 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         movie.setReleaseDate(dto.getReleaseDate().toString());
         movie.setOverview(dto.getOverview());
         movie.setVoteAverage(dto.getVoteAverage());
+        movie.setActors(dto.getActors().stream().map(this::toActor).collect(Collectors.toList()));
+        movie.setDirectors(dto.getDirectors().stream().map(this::toDirector).collect(Collectors.toList()));
 
         return movie;
     }
@@ -145,7 +155,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         dto.setId(movie.getId());
         dto.setOriginalTitle(movie.getOriginalTitle());
         dto.setReleaseDate(LocalDate.parse(movie.getReleaseDate()));
-        dto.setCast(movie.getActors().stream().map(this::toActorDTO).collect(Collectors.toList()));
+        dto.setActors(movie.getActors().stream().map(this::toActorDTO).collect(Collectors.toList()));
         dto.setDirectors(movie.getDirectors().stream().map(this::toDirectorDTO).collect(Collectors.toList()));
         dto.setOverview(movie.getOverview());
         dto.setVoteAverage(movie.getVoteAverage());

@@ -30,7 +30,7 @@ public class Movie {
     @Column(name = "vote_average", nullable = false)
     private double voteAverage;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "actors",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -38,7 +38,7 @@ public class Movie {
     @Column(name = "actors")
     private List<Actor> actors;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "directors",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -47,4 +47,18 @@ public class Movie {
     @Column(name = "directors")
     private List<Director> directors;
 
+    public void addActors(List<Actor> actor) {
+        for (Actor a : actor) {
+            actors.add(a);
+            a.getKnownFor().add(this);
+        }
+    }
+
+
+    public void addDirectors(List<Director> director) {
+        for (Director d : director) {
+            directors.add(d);
+            d.getKnownFor().add(this);
+        }
+    }
 }

@@ -19,13 +19,18 @@ public class Actor {
     @Column(name = "actor_id", nullable = false, unique = true)
     private int id;
 
-    @Column(name = "name",nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "gender",nullable = false)
+    @Column(name = "gender")
     private int gender;
 
     @ManyToMany(mappedBy = "actors")
     private List<Movie> knownFor;
+
+    public void addMovie(Movie movie) {
+        knownFor.add(movie);
+        movie.getActors().add(this);
+    }
 
 }

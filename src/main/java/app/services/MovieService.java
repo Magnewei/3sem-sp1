@@ -62,7 +62,7 @@ public class MovieService {
     public List<MovieDTO> sortByActor(Actor actor) {
         List<MovieDTO> allMovies = movieDAO.getAll();
         allMovies.stream()
-                .filter(m -> m.getCast().contains(actor))
+                .filter(m -> m.getActors().contains(actor))
                 .forEach(System.out::println);
         return allMovies;
     }
@@ -70,7 +70,7 @@ public class MovieService {
     public List<MovieDTO> sortByDirector(Director director) {
         List<MovieDTO> allMovies = movieDAO.getAll();
         allMovies.stream()
-                .filter(m -> m.getCast().contains(director))
+                .filter(m -> m.getActors().contains(director))
                 .forEach(System.out::println);
 
         return allMovies;

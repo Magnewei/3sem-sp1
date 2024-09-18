@@ -26,7 +26,7 @@ public class MovieDTO {
     @JsonProperty("overview")
     private String overview;
 
-    private List<ActorDTO> cast;
+    private List<ActorDTO> actors;
 
     private List<DirectorDTO> directors;
 
