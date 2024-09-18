@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a71957f6-c8ca-4f9a-8304-2c5f35ec1814" name="Changes" comment="Minor">
+    <list default="true" id="a71957f6-c8ca-4f9a-8304-2c5f35ec1814" name="Changes" comment="API calls are working, just not mapping to DTO">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/exceptions/ApiException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/exceptions/ApiException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/HibernateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/HibernateConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/ApiServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/ApiServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/ActorDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dtos/ActorDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/DirectorDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dtos/DirectorDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/MovieDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dtos/MovieDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/Director.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/Director.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/Movie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/ApiService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/services/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/MovieService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -20,20 +22,19 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
         <option value="Exception" />
+        <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="DI_and_minor_changes" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -41,18 +42,10 @@
     &quot;assignee&quot;: &quot;Magnewei&quot;
   }
 }</component>
-  <component name="GithubProjectSettings">
-    <option name="branchProtectionPatterns">
-      <list>
-        <option value="master" />
-        <option value="develop" />
-      </list>
-    </option>
-  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Magnewei/3sem-sp1&quot;,
-    &quot;accountId&quot;: &quot;a5e1d5c9-a7cb-4beb-9b2f-a6bd662c4e06&quot;
+    &quot;url&quot;: &quot;https://github.com/Magnewei/3sem-sp1.git&quot;,
+    &quot;accountId&quot;: &quot;e36e67f0-7d59-4b5e-a2a2-1c0ce19ecfcb&quot;
   }
 }</component>
   <component name="GoLibraries">
@@ -67,7 +60,6 @@
     <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
-    <option name="showMembers" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
   <component name="PropertiesComponent">{
@@ -78,8 +70,9 @@
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;DI__and__minor__changes&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;getFromAPI&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/magnusnorgaardweihager/Documents/GitHub/CPH-BUSINESS/HibernateTemplate&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -87,6 +80,9 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -135,6 +131,8 @@
       <workItem from="1726474464286" duration="1185000" />
       <workItem from="1726479270098" duration="2845000" />
       <workItem from="1726506984167" duration="7513000" />
+      <workItem from="1726575654466" duration="2520000" />
+      <workItem from="1726613872062" duration="3459000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <option name="closed" value="true" />

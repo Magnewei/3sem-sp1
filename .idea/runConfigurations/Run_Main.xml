@@ -3,13 +3,20 @@
     <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <envs>
-      <env name="TEST_DB_NAME" value="jpa_day_2" />
-      <env name="TEST_DB_URL" value="jdbc:postgresql://192.168.1.1/" />
-      <env name="TEST_DB_PASSWORD" value="password123" />
-      <env name="TEST_DB_USERNAME" value="username123" />
+      <env name="TMDB_API_KEY" value="89cb1c6c8e0bbbdec10d6d70abc22c28" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="app.Main" />
     <module name="HibernateTemplate" />
+    <extension name="net.ashald.envfile">
+      <option name="IS_ENABLED" value="false" />
+      <option name="IS_SUBST" value="false" />
+      <option name="IS_PATH_MACRO_SUPPORTED" value="false" />
+      <option name="IS_IGNORE_MISSING_FILES" value="false" />
+      <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
+      <ENTRIES>
+        <ENTRY IS_ENABLED="true" PARSER="runconfig" IS_EXECUTABLE="false" />
+      </ENTRIES>
+    </extension>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

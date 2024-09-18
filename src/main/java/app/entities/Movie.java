@@ -2,7 +2,6 @@ package app.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,13 +9,10 @@ import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name = "movies")
+@NoArgsConstructor
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "original_title", nullable = false)
@@ -30,9 +26,6 @@ public class Movie {
 
     @Column(name = "vote_average", nullable = false)
     private double voteAverage;
-
-    @Column(name = "adult", nullable = false)
-    private boolean adult;
 
     @ManyToMany
     @JoinTable(

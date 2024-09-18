@@ -1,5 +1,5 @@
 package app.persistence.daos;
-
+/*
 import app.dtos.MoviePersonDTO;
 import app.entities.MoviePerson;
 import app.enums.HibernateConfigState;
@@ -13,7 +13,7 @@ import java.util.List;
  * Purpose:
  *
  * @Author: Anton Friis Stengaard
- */
+
 public class MoviePersonDAO implements GenericDAO<MoviePersonDTO, MoviePerson> {
     private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(HibernateConfigState.TEST);
 
@@ -98,3 +98,4 @@ public class MoviePersonDAO implements GenericDAO<MoviePersonDTO, MoviePerson> {
         return null;
     }
 }
+*/

@@ -3,19 +3,15 @@ package app.services;
 import app.dtos.MovieDTO;
 import app.entities.Actor;
 import app.entities.Director;
-import app.entities.Movie;
-import app.entities.MoviePerson;
-import app.enums.HibernateConfigState;
-import app.persistence.HibernateConfig;
 import app.persistence.daos.MovieDAO;
-import app.persistence.daos.MoviePersonDAO;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.NoArgsConstructor;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Purpose:
@@ -24,15 +20,19 @@ import java.util.concurrent.Executors;
  */
 @NoArgsConstructor
 public class MovieService {
-    private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(HibernateConfigState.TEST);
-    private static final MoviePersonDAO moviePersonDAO = new MoviePersonDAO(emf);
-    private static final MovieDAO movieDAO = new MovieDAO(emf);
+    private static EntityManagerFactory emf;
+    private static MovieDAO movieDAO;
     private static MovieService instance;
+    private static ApiService apiService;
 
-    public static MovieService getInstance() {
+    public static synchronized MovieService getInstance(ExecutorService executorService, EntityManagerFactory entityManagerFactory) {
         if (instance == null) {
             instance = new MovieService();
+            emf = entityManagerFactory;
+            movieDAO = new MovieDAO(emf);
+            apiService = ApiService.getInstance(executorService);
         }
+
         return instance;
     }
 
@@ -52,13 +52,6 @@ public class MovieService {
         return allmovies;
     }
 
-   /* public List<MovieDTO> sortByGenre() {
-        List<MovieDTO> allmovies = movieDAO.getAll();
-        allmovies.stream()
-                .sorted((Comparator.comparing(MovieDTO::getGenre)))
-                .forEach(System.out::println);
-        return allmovies;
-    }*/
 
     public List<MovieDTO> sortByActor(Actor actor) {
         List<MovieDTO> allMovies = movieDAO.getAll();
@@ -73,11 +66,23 @@ public class MovieService {
         allMovies.stream()
                 .filter(m -> m.getCast().contains(director))
                 .forEach(System.out::println);
+
         return allMovies;
     }
 
-    public void fetchDataFromApi(String endpoint) {
-        // Fetch data from API and save to database
+
+    public void fetchDataFromApi() {
+        List<MovieDTO> movies;
+        try {
+            movies = apiService.fetchMoviesFromApiEndpoint(1);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(movies);
     }
 
     public void saveMoviesToDatabase(List<MovieDTO> movies) {
