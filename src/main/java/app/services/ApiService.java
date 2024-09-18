@@ -3,6 +3,7 @@ package app.services;
 import app.dtos.ActorDTO;
 import app.dtos.DirectorDTO;
 import app.dtos.MovieDTO;
+import app.exceptions.JpaException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -23,7 +24,6 @@ import java.util.stream.Collectors;
 public class ApiService {
     private static ApiService instance;
     private static final String API_KEY = System.getenv("TMDB_API_KEY");
-    private static int movieId = 0;
     private static ExecutorService pool;
 
     public static ApiService getInstance(ExecutorService executorService) {
@@ -46,7 +46,6 @@ public class ApiService {
         while (currentPage <= numberOfPages) {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(API_URL + currentPage))
-                    .version(HttpClient.Version.HTTP_1_1)
                     .GET()
                     .build();
 
@@ -128,11 +127,11 @@ public class ApiService {
                             }
 
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            throw new JpaException("Could not fetch data from the TMDB API.");
                         }
                         return movieDTO;
                     }, pool))
-                    .collect(Collectors.toList());
+                    .toList();
 
             allMovies.addAll(futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
             currentPage++;

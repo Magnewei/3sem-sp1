@@ -17,7 +17,6 @@ import java.util.Properties;
 public class HibernateConfig {
 
     private static EntityManagerFactory entityManagerFactory;
-    private static String dbName = "movie";
 
     public static EntityManagerFactory getEntityManagerFactoryConfig(HibernateConfigState state) {
         if (entityManagerFactory == null) {
@@ -34,18 +33,16 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(app.entities.Actor.class);
         configuration.addAnnotatedClass(app.entities.Director.class);
         configuration.addAnnotatedClass(app.entities.Movie.class);
-
-        //configuration.addAnnotatedClass(Package.class);
     }
 
     private static EntityManagerFactory buildEntityFactoryConfig() {
         try {
             Configuration configuration = new Configuration();
             Properties props = new Properties();
-            String connctionURL = String.format("jdbc:postgresql://localhost:5432/%s?currentSchema=public", dbName);
+            String connctionURL = String.format(System.getenv("DEPLOYED_DB_URL"), System.getenv("DEPLOYED_DB_NAME"));
             props.put("hibernate.connection.url", connctionURL);
-            props.put("hibernate.connection.username", "postgres");
-            props.put("hibernate.connection.password", "postgres");
+            props.put("hibernate.connection.username", System.getenv("DEPLOYED_DB_USERNAME"));
+            props.put("hibernate.connection.password", System.getenv("DEPLOYED_DB_PASSWORD"));
             // props.put("hibernate.show_sql", "true"); // show sql in console
             // props.put("hibernate.format_sql", "true"); // format sql in console
             // props.put("hibernate.use_sql_comments", "true"); // show sql comments in console
@@ -67,7 +64,7 @@ public class HibernateConfig {
         try {
             Configuration configuration = new Configuration();
             Properties props = new Properties();
-            props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+            //props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
             props.put("hibernate.connection.driver_class", "org.testcontainers.jdbc.ContainerDatabaseDriver");
             props.put("hibernate.connection.url", "jdbc:tc:postgresql:16.2-alpine3.18:///test-db");
             props.put("hibernate.connection.username", "postgres");

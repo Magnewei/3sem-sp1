@@ -1,14 +1,18 @@
 package app.persistence.daos;
 
+import app.dtos.ActorDTO;
+import app.dtos.DirectorDTO;
 import app.dtos.MovieDTO;
+import app.entities.Actor;
+import app.entities.Director;
 import app.entities.Movie;
-import app.enums.HibernateConfigState;
 import app.exceptions.JpaException;
-import app.persistence.HibernateConfig;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Purpose:
@@ -32,8 +36,6 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
             em.persist(movie);
             em.getTransaction().commit();
 
-        } catch (Exception e) {
-            throw new JpaException("Could not persist movie.");
         }
     }
 
@@ -97,16 +99,79 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
     public Movie toEntity(MovieDTO dto) {
         if (dto == null) return null;
 
-        // TODO: Implement conversion from MovieDTO to Movie
-        return null;
+        Movie movie = new Movie();
+        movie.setId(dto.getId());
+        movie.setOriginalTitle(dto.getOriginalTitle());
+        movie.setReleaseDate(dto.getReleaseDate().toString());
+        movie.setGenreIds(dto.getGenreIds());
+        movie.setOverview(dto.getOverview());
+        movie.setVoteAverage(dto.getVoteAverage());
+
+        return movie;
+    }
+
+    private Actor toActor(ActorDTO dto) {
+        if (dto == null) return null;
+
+        Actor actor = new Actor();
+        actor.setId(dto.getId());
+        actor.setName(dto.getName());
+        actor.setGender(dto.getGender());
+        actor.setKnownFor(dto.getKnownFor().stream().map(this::toEntity).collect(Collectors.toList()));
+        return actor;
+    }
+
+    private Director toDirector(DirectorDTO dto) {
+        if (dto == null) return null;
+
+        Director director = new Director();
+        director.setId(dto.getId());
+        director.setName(dto.getName());
+        director.setGender(dto.getGender());
+        director.setKnownFor(dto.getKnownFor().stream().map(this::toEntity).collect(Collectors.toList()));
+        return director;
     }
 
     @Override
     public MovieDTO toDTO(Movie movie) {
         if (movie == null) return null;
 
-        // TODO: Implement conversion from MovieDTO to Movie
-        return null;
+        MovieDTO dto = new MovieDTO();
+        dto.setId(movie.getId());
+        dto.setOriginalTitle(movie.getOriginalTitle());
+        dto.setReleaseDate(LocalDate.parse(movie.getReleaseDate()));
+        dto.setCast(movie.getActor().stream().map(this::toActorDTO).collect(Collectors.toList()));
+        dto.setDirectors(movie.getDirectors().stream().map(this::toDirectorDTO).collect(Collectors.toList()));
+        dto.setGenreIds(movie.getGenreIds());
+        dto.setOverview(movie.getOverview());
+        dto.setVoteAverage(movie.getVoteAverage());
+
+        return dto;
     }
+
+
+    public ActorDTO toActorDTO(Actor actor) {
+        if (actor == null) return null;
+
+        ActorDTO dto = new ActorDTO();
+        dto.setId(actor.getId());
+        dto.setName(actor.getName());
+        dto.setGender(actor.getGender());
+        dto.setKnownFor(actor.getKnownFor().stream().map(this::toDTO).collect(Collectors.toList()));
+        return dto;
+    }
+
+    public DirectorDTO toDirectorDTO(Director director) {
+        if (director == null) return null;
+
+        DirectorDTO dto = new DirectorDTO();
+        dto.setId(director.getId());
+        dto.setName(director.getName());
+        dto.setGender(director.getGender());
+        dto.setKnownFor(director.getKnownFor().stream().map(this::toDTO).collect(Collectors.toList()));
+        return dto;
+    }
+
 }
+
 

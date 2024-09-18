@@ -12,13 +12,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Movie {
+
     @Id
+    @Column(name = "movie_id", nullable = false, unique = true)
     private int id;
 
     @Column(name = "original_title", nullable = false)
     private String originalTitle;
 
-    @Column(name = "overview", nullable = false)
+    @Column(name = "overview")
     private String overview;
 
     @Column(name = "release_date", nullable = false)
@@ -28,19 +30,23 @@ public class Movie {
     private double voteAverage;
 
     @ManyToMany
+    /*
     @JoinTable(
-            name = "movie_actor",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
-    private List<Actor> cast;
+
+     */
+    private List<Actor> actor;
 
     @ManyToMany
+    /*
     @JoinTable(
-            name = "movie_director",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "director_id")
     )
+
+     */
     private List<Director> directors;
 
     @ElementCollection

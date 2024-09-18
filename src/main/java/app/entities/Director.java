@@ -1,9 +1,6 @@
 package app.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
@@ -15,8 +12,11 @@ import java.util.List;
  */
 @Entity
 @Data
+@Table(name = "directors")
 public class Director {
+
     @Id
+    @Column(name = "director_id", nullable = false, unique = true)
     private int id;
 
     @Column(name = "name",nullable = false)

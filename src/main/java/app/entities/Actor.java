@@ -1,12 +1,7 @@
 package app.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import lombok.Builder;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -17,8 +12,11 @@ import java.util.List;
  */
 @Entity
 @Data
+@Table(name = "actors")
 public class Actor {
+
     @Id
+    @Column(name = "actor_id", nullable = false, unique = true)
     private int id;
 
     @Column(name = "name",nullable = false)
@@ -27,7 +25,7 @@ public class Actor {
     @Column(name = "gender",nullable = false)
     private int gender;
 
-    @ManyToMany(mappedBy = "cast")
+    @ManyToMany(mappedBy = "actor")
     private List<Movie> knownFor;
 
 }

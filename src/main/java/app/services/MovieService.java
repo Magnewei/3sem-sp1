@@ -3,6 +3,10 @@ package app.services;
 import app.dtos.MovieDTO;
 import app.entities.Actor;
 import app.entities.Director;
+import app.enums.HibernateConfigState;
+import app.exceptions.ApiException;
+import app.exceptions.JpaException;
+import app.persistence.HibernateConfig;
 import app.persistence.daos.MovieDAO;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.NoArgsConstructor;
@@ -20,16 +24,16 @@ import java.util.concurrent.ExecutorService;
  */
 @NoArgsConstructor
 public class MovieService {
-    private static EntityManagerFactory emf;
+    private static EntityManagerFactory entityManagerFactory = HibernateConfig.getEntityManagerFactoryConfig(HibernateConfigState.NORMAL);
     private static MovieDAO movieDAO;
     private static MovieService instance;
     private static ApiService apiService;
 
-    public static synchronized MovieService getInstance(ExecutorService executorService, EntityManagerFactory entityManagerFactory) {
+
+    public static synchronized MovieService getInstance(ExecutorService executorService) {
         if (instance == null) {
             instance = new MovieService();
-            emf = entityManagerFactory;
-            movieDAO = new MovieDAO(emf);
+            movieDAO = new MovieDAO(entityManagerFactory);
             apiService = ApiService.getInstance(executorService);
         }
 
@@ -70,23 +74,14 @@ public class MovieService {
         return allMovies;
     }
 
-
-    public void fetchDataFromApi() {
-        List<MovieDTO> movies;
+    public void saveMoviesToDatabase() {
         try {
-            movies = apiService.fetchMoviesFromApiEndpoint(1);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(movies);
-    }
+            List<MovieDTO> movies = apiService.fetchMoviesFromApiEndpoint(1);
+            movies.forEach(movieDAO::create);
 
-    public void saveMoviesToDatabase(List<MovieDTO> movies) {
-        // Save movies to the database
+        } catch (URISyntaxException | InterruptedException | IOException e) {
+            throw new JpaException("Could not persist movies to the database.");
+        }
     }
 }
 
