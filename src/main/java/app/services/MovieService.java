@@ -51,15 +51,6 @@ public class MovieService {
                 .forEach(System.out::println);
         return allmovies;
     }
-    /*
-    public List<MovieDTO> sortByGenre() {
-        List<MovieDTO> allmovies = movieDAO.getAll();
-        allmovies.stream()
-                .sorted((Comparator.comparing(MovieDTO::getGenre)))
-                .forEach(System.out::println);
-        return allmovies;
-    }
-    */
 
 
     public List<MovieDTO> sortByActor(Actor actor) {
@@ -67,7 +58,6 @@ public class MovieService {
         allMovies.stream()
                 .filter(m -> m.getCast().contains(actor))
                 .forEach(System.out::println);
-
         return allMovies;
     }
 

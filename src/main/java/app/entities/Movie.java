@@ -27,9 +27,6 @@ public class Movie {
     @Column(name = "vote_average", nullable = false)
     private double voteAverage;
 
-    @Column(name = "adult", nullable = false)
-    private boolean adult;
-
     @ManyToMany
     @JoinTable(
             name = "movie_actor",
