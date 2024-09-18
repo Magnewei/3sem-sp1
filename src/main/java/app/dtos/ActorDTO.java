@@ -21,8 +21,11 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ActorDTO {
 
-    @JsonProperty("id")
+    @JsonIgnore
     private int id;
+
+    @JsonProperty("id")
+    private int actorId;
 
     @JsonProperty("name")
     private String name;
@@ -32,4 +35,6 @@ public class ActorDTO {
 
     @JsonIgnore
     private List<MovieDTO> knownFor;
+
+
 }

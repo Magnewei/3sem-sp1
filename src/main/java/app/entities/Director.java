@@ -16,14 +16,18 @@ import java.util.List;
 public class Director {
 
     @Id
-    @Column(name = "director_id", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     private int id;
+
+    @Column(name = "director_id", nullable = false, unique = true)
+    private int directorId;
 
     @Column(name = "name",nullable = false)
     private String name;
 
     @Column(name = "gender",nullable = false)
-    private String gender;
+    private int gender;
 
     @ManyToMany(mappedBy = "directors")
     private List<Movie> knownFor;

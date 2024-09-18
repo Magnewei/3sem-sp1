@@ -16,8 +16,12 @@ import java.util.List;
 public class Actor {
 
     @Id
-    @Column(name = "actor_id", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     private int id;
+
+    @Column(name = "actor_id", nullable = false, unique = true)
+    private int actorId;
 
     @Column(name = "name")
     private String name;
@@ -27,10 +31,5 @@ public class Actor {
 
     @ManyToMany(mappedBy = "actors")
     private List<Movie> knownFor;
-
-    public void addMovie(Movie movie) {
-        knownFor.add(movie);
-        movie.getActors().add(this);
-    }
 
 }

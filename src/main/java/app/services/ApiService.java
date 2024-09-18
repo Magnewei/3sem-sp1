@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.stream.Collectors;
 
 public class ApiService {
     private static ApiService instance;
@@ -55,7 +54,7 @@ public class ApiService {
             List<CompletableFuture<MovieDTO>> futures = movieResponse.getResults().stream()
                     .map(movie -> CompletableFuture.supplyAsync(() -> {
                         MovieDTO movieDTO = new MovieDTO();
-                        movieDTO.setId(movie.getId());
+                        movieDTO.setMovieId(movie.getMovieId());
                         movieDTO.setOriginalTitle(movie.getOriginalTitle());
                         movieDTO.setReleaseDate(movie.getReleaseDate());
                         movieDTO.setVoteAverage(movie.getVoteAverage());
@@ -79,15 +78,16 @@ public class ApiService {
                             if (creditsNode.has("cast")) {
                                 for (JsonNode castNode : creditsNode.get("cast")) {
                                     ActorDTO actor = new ActorDTO();
-                                    actor.setId(castNode.get("id").asInt());
                                     actor.setName(castNode.get("name").asText());
                                     actor.setGender(castNode.get("gender").asInt());
+                                    actor.setActorId(castNode.get("id").asInt());
 
                                     List<MovieDTO> knownForMovies = new ArrayList<>();
                                     if (castNode.has("known_for")) {
                                         for (JsonNode knownForNode : castNode.get("known_for")) {
                                             MovieDTO knownMovie = new MovieDTO();
-                                            knownMovie.setId(knownForNode.get("id").asInt());
+                                            knownMovie.setMovieId(knownForNode.get("id").asInt());
+
                                             knownMovie.setOriginalTitle(knownForNode.get("title").asText());
                                             knownMovie.setReleaseDate(LocalDate.parse(knownForNode.get("release_date").asText()));
                                             knownForMovies.add(knownMovie);
@@ -105,7 +105,7 @@ public class ApiService {
                                 for (JsonNode crewNode : creditsNode.get("crew")) {
                                     if ("Director".equalsIgnoreCase(crewNode.get("job").asText())) {
                                         DirectorDTO director = new DirectorDTO();
-                                        director.setId(crewNode.get("id").asInt());
+                                        director.setDirectorId(crewNode.get("id").asInt());
                                         director.setName(crewNode.get("name").asText());
 
                                         // Extract the 'known_for' array and map to MovieDTO
@@ -113,7 +113,7 @@ public class ApiService {
                                         if (crewNode.has("known_for")) {
                                             for (JsonNode knownForNode : crewNode.get("known_for")) {
                                                 MovieDTO knownMovie = new MovieDTO();
-                                                knownMovie.setId(knownForNode.get("id").asInt());
+                                                knownMovie.setMovieId(knownForNode.get("id").asInt());
                                                 knownMovie.setOriginalTitle(knownForNode.get("title").asText());
                                                 knownMovie.setReleaseDate(LocalDate.parse(knownForNode.get("release_date").asText()));
                                                 knownForMovies.add(knownMovie);

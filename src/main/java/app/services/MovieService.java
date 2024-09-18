@@ -81,10 +81,11 @@ public class MovieService {
             List<MovieDTO> movies = apiService.fetchMoviesFromApiEndpoint(1);
 
              for(MovieDTO movie : movies) {
-                movieDAO.create(movie);
-            }
+                 movieDAO.create(movie);
+             }
 
         } catch (URISyntaxException | InterruptedException | IOException e) {
+            System.err.println(e.getMessage());
             throw new JpaException("Could not persist movies to the database.");
         }
     }

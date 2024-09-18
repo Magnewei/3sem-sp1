@@ -15,8 +15,12 @@ import java.util.List;
 public class Movie {
 
     @Id
-    @Column(name = "movie_id", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true, nullable = false)
     private int id;
+
+    @Column(name = "movie_id", nullable = false, unique = true)
+    private int movieId;
 
     @Column(name = "original_title", nullable = false)
     private String originalTitle;
@@ -30,35 +34,18 @@ public class Movie {
     @Column(name = "vote_average", nullable = false)
     private double voteAverage;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany
     @JoinTable(
             name = "actors",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id"))
-    @Column(name = "actors")
     private List<Actor> actors;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany
     @JoinTable(
             name = "directors",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "director_id")
     )
-    @Column(name = "directors")
     private List<Director> directors;
-
-    public void addActors(List<Actor> actor) {
-        for (Actor a : actor) {
-            actors.add(a);
-            a.getKnownFor().add(this);
-        }
-    }
-
-
-    public void addDirectors(List<Director> director) {
-        for (Director d : director) {
-            directors.add(d);
-            d.getKnownFor().add(this);
-        }
-    }
 }
