@@ -52,7 +52,7 @@ public class HibernateConfig {
             Configuration configuration = new Configuration();
             Properties props = new Properties();
 
-            props.put("hibernate.connection.url", System.getenv("DEPLOYED_DB_URL") + System.getenv("DEPLOYED_DB_NAME"));
+            props.put("hibernate.connection.url", System.getenv("DEPLOYED_DB_URL"));
             props.put("hibernate.connection.username", System.getenv("DEPLOYED_DB_USERNAME"));
             props.put("hibernate.connection.password", System.getenv("DEPLOYED_DB_PASSWORD"));
 

@@ -3,25 +3,17 @@ package app.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Purpose:
- *
- * @Author: Anton Friis Stengaard
- */
 @Entity
 @Data
 @Table(name = "actors")
 public class Actor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(name = "id")
     private int id;
-
-    @Column(name = "actor_id", nullable = false, unique = true)
-    private int actorId;
 
     @Column(name = "name")
     private String name;
@@ -29,7 +21,7 @@ public class Actor {
     @Column(name = "gender")
     private int gender;
 
-    @ManyToMany(mappedBy = "actors")
-    private List<Movie> knownFor;
+    @ManyToMany(mappedBy = "cast", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Movie> knownFor = new ArrayList<>();
 
 }

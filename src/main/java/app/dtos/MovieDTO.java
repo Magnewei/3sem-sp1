@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,18 +25,15 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDTO {
 
-    @JsonIgnore
-    private int id;
-
     @JsonProperty("id")
-    private int movieId;
+    private int id;
 
     @JsonProperty("overview")
     private String overview;
 
-    private List<ActorDTO> actors;
+    private List<ActorDTO> actors = new ArrayList<>();;
 
-    private List<DirectorDTO> directors;
+    private List<DirectorDTO> directors = new ArrayList<>();;
 
     @JsonProperty("genre_ids")
     private List<Integer> genreIds;

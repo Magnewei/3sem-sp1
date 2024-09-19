@@ -11,7 +11,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.transaction.Transactional;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,15 +33,15 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
 
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            em.persist(movie);
+            em.persist(movie);  // Persist the Movie after its relationships are saved
             em.getTransaction().commit();
 
-        } catch (IllegalAccessError e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             throw new JpaException("Could not create movie.");
-
         }
     }
+
 
 
     @Override
@@ -104,34 +104,25 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         if (dto == null) return null;
 
         Movie movie = new Movie();
-        movie.setMovieId(dto.getMovieId());
         movie.setOriginalTitle(dto.getOriginalTitle());
-        movie.setReleaseDate(dto.getReleaseDate().toString());
+        movie.setReleaseDate(dto.getReleaseDate());
         movie.setOverview(dto.getOverview());
         movie.setVoteAverage(dto.getVoteAverage());
 
-        if (dto.getActors() != null) {
-            movie.setActors(dto.getActors().stream().map(this::toActor).collect(Collectors.toList()));
-        }
-
-        if (dto.getDirectors() != null) {
-            movie.setDirectors(dto.getDirectors().stream().map(this::toDirector).collect(Collectors.toList()));
-        }
 
         return movie;
     }
+
 
     private Actor toActor(ActorDTO dto) {
         if (dto == null) return null;
 
         Actor actor = new Actor();
-        actor.setActorId(dto.getActorId());
         actor.setName(dto.getName());
 
         if (dto.getGender() != 0) actor.setGender(dto.getGender());
 
 
-        actor.setKnownFor(dto.getKnownFor().stream().map(this::toEntity).collect(Collectors.toList()));
         return actor;
     }
 
@@ -139,10 +130,8 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         if (dto == null) return null;
 
         Director director = new Director();
-        director.setDirectorId(dto.getDirectorId());
         director.setName(dto.getName());
         director.setGender(dto.getGender());
-        director.setKnownFor(dto.getKnownFor().stream().map(this::toEntity).collect(Collectors.toList()));
         return director;
     }
 
@@ -155,11 +144,8 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
             dto.setId(movie.getId());
         }
 
-        dto.setMovieId(movie.getMovieId());
         dto.setOriginalTitle(movie.getOriginalTitle());
-        dto.setReleaseDate(LocalDate.parse(movie.getReleaseDate()));
-        dto.setActors(movie.getActors().stream().map(this::toActorDTO).collect(Collectors.toList()));
-        dto.setDirectors(movie.getDirectors().stream().map(this::toDirectorDTO).collect(Collectors.toList()));
+        dto.setReleaseDate(movie.getReleaseDate());
         dto.setOverview(movie.getOverview());
         dto.setVoteAverage(movie.getVoteAverage());
 
@@ -175,10 +161,8 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
             dto.setId(actor.getId());
         }
 
-        dto.setActorId(actor.getActorId());
         dto.setName(actor.getName());
         dto.setGender(actor.getGender());
-        dto.setKnownFor(actor.getKnownFor().stream().map(this::toDTO).collect(Collectors.toList()));
         return dto;
     }
 
@@ -186,27 +170,12 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         if (director == null) return null;
 
         DirectorDTO dto = new DirectorDTO();
-        dto.setDirectorId(director.getDirectorId());
         dto.setName(director.getName());
         dto.setGender(director.getGender());
-        dto.setKnownFor(director.getKnownFor().stream().map(this::toDTO).collect(Collectors.toList()));
         return dto;
     }
 
 
-    private void prePersistActors(Movie movie, EntityManager em) {
-        movie.getActors().forEach(actor -> {
-            em.persist(actor);
-            em.getTransaction().commit();
-        });
-    }
-
-    private void prePersistDirectors(Movie movie, EntityManager em) {
-        movie.getDirectors().forEach(director -> {
-            em.persist(director);
-            em.getTransaction().commit();
-        });
-    }
 
 }
 

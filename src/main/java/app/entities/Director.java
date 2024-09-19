@@ -3,6 +3,7 @@ package app.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,21 +17,16 @@ import java.util.List;
 public class Director {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(name = "id")
     private int id;
 
-    @Column(name = "director_id", nullable = false, unique = true)
+    @Column(name = "director_id", unique = true, nullable = false)
     private int directorId;
 
-    @Column(name = "name",nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "gender",nullable = false)
+    @Column(name = "gender")
     private int gender;
-
-    @ManyToMany(mappedBy = "directors")
-    private List<Movie> knownFor;
-
 
 }

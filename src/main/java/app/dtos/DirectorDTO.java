@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,11 +22,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DirectorDTO {
 
-    @JsonIgnore
-    private int id;
-
     @JsonProperty("id")
-    private int directorId;
+    private int id;
 
     @JsonProperty("name")
     private String name;
@@ -33,6 +31,4 @@ public class DirectorDTO {
     @JsonProperty("gender")
     private int gender;
 
-    @JsonIgnore
-    private List<MovieDTO> knownFor;
 }

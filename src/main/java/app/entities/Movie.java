@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,37 +17,38 @@ import java.util.List;
 public class Movie {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private int id;
 
-    @Column(name = "movie_id", nullable = false, unique = true)
-    private int movieId;
-
-    @Column(name = "original_title", nullable = false)
+    @Column(name = "original_title")
     private String originalTitle;
 
     @Column(name = "overview")
-    private String overview = "";
+    private String overview;
 
-    @Column(name = "release_date", nullable = false)
-    private String releaseDate;
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
 
-    @Column(name = "vote_average", nullable = false)
+    @Column(name = "vote_average")
     private double voteAverage;
 
-    @ManyToMany
-    @JoinTable(
-            name = "actors",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "actor_id"))
-    private List<Actor> actors;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "knownFor",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id")
+    )
+    private List<Actor> cast;
+
+/*
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "directors",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "director_id")
     )
-    private List<Director> directors;
+    private List<Director> directors = new ArrayList<>();;
+
+     */
 }

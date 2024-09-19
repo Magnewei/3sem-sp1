@@ -1,9 +1,9 @@
 package app.services;
 
+
 import app.dtos.ActorDTO;
 import app.dtos.DirectorDTO;
 import app.dtos.MovieDTO;
-import app.exceptions.JpaException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -14,15 +14,16 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 public class ApiService {
     private static ApiService instance;
     private static final String API_KEY = System.getenv("TMDB_API_KEY");
+    private static int movieId = 0;
     private static ExecutorService pool;
 
     public static ApiService getInstance(ExecutorService executorService) {
@@ -45,6 +46,7 @@ public class ApiService {
         while (currentPage <= numberOfPages) {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(API_URL + currentPage))
+                    .version(HttpClient.Version.HTTP_1_1)
                     .GET()
                     .build();
 
@@ -54,12 +56,11 @@ public class ApiService {
             List<CompletableFuture<MovieDTO>> futures = movieResponse.getResults().stream()
                     .map(movie -> CompletableFuture.supplyAsync(() -> {
                         MovieDTO movieDTO = new MovieDTO();
-                        movieDTO.setMovieId(movie.getMovieId());
+                        movieDTO.setId(movie.getId());
                         movieDTO.setOriginalTitle(movie.getOriginalTitle());
                         movieDTO.setReleaseDate(movie.getReleaseDate());
                         movieDTO.setVoteAverage(movie.getVoteAverage());
                         movieDTO.setGenreIds(movie.getGenreIds());
-
 
                         try {
                             // Fetch cast and directors
@@ -78,63 +79,36 @@ public class ApiService {
                             if (creditsNode.has("cast")) {
                                 for (JsonNode castNode : creditsNode.get("cast")) {
                                     ActorDTO actor = new ActorDTO();
+                                    actor.setId(castNode.get("id").asInt());
                                     actor.setName(castNode.get("name").asText());
                                     actor.setGender(castNode.get("gender").asInt());
-                                    actor.setActorId(castNode.get("id").asInt());
 
-                                    List<MovieDTO> knownForMovies = new ArrayList<>();
-                                    if (castNode.has("known_for")) {
-                                        for (JsonNode knownForNode : castNode.get("known_for")) {
-                                            MovieDTO knownMovie = new MovieDTO();
-                                            knownMovie.setMovieId(knownForNode.get("id").asInt());
 
-                                            knownMovie.setOriginalTitle(knownForNode.get("title").asText());
-                                            knownMovie.setReleaseDate(LocalDate.parse(knownForNode.get("release_date").asText()));
-                                            knownForMovies.add(knownMovie);
-                                        }
-                                    }
-                                    actor.setKnownFor(knownForMovies);
-                                    actors.add(actor);
-                                }
-                                movieDTO.setActors(actors);
-                            }
+                                    // Extract director from the crew
+                                    List<DirectorDTO> directors = new ArrayList<>();
+                                    if (creditsNode.has("crew")) {
+                                        for (JsonNode crewNode : creditsNode.get("crew")) {
+                                            if ("Director".equalsIgnoreCase(crewNode.get("job").asText())) {
+                                                DirectorDTO director = new DirectorDTO();
+                                                director.setId(crewNode.get("id").asInt());
+                                                director.setName(crewNode.get("name").asText());
 
-                            // Extract director from the crew
-                            List<DirectorDTO> directors = new ArrayList<>();
-                            if (creditsNode.has("crew")) {
-                                for (JsonNode crewNode : creditsNode.get("crew")) {
-                                    if ("Director".equalsIgnoreCase(crewNode.get("job").asText())) {
-                                        DirectorDTO director = new DirectorDTO();
-                                        director.setDirectorId(crewNode.get("id").asInt());
-                                        director.setName(crewNode.get("name").asText());
-
-                                        // Extract the 'known_for' array and map to MovieDTO
-                                        List<MovieDTO> knownForMovies = new ArrayList<>();
-                                        if (crewNode.has("known_for")) {
-                                            for (JsonNode knownForNode : crewNode.get("known_for")) {
-                                                MovieDTO knownMovie = new MovieDTO();
-                                                knownMovie.setMovieId(knownForNode.get("id").asInt());
-                                                knownMovie.setOriginalTitle(knownForNode.get("title").asText());
-                                                knownMovie.setReleaseDate(LocalDate.parse(knownForNode.get("release_date").asText()));
-                                                knownForMovies.add(knownMovie);
+                                                directors.add(director);
                                             }
                                         }
-                                        director.setKnownFor(knownForMovies);  // Set knownForMovies as MovieDTO list in DirectorDTO
-
-                                        directors.add(director);
+                                        movieDTO.setDirectors(directors);
                                     }
                                 }
-                                movieDTO.setDirectors(directors);
                             }
 
                         } catch (Exception e) {
-                            throw new JpaException("Could not fetch data from the TMDB API.");
+                            e.printStackTrace();
                         }
                         return movieDTO;
                     }, pool))
-                    .toList();
+                    .collect(Collectors.toList());
 
-            allMovies.addAll(futures.stream().map(CompletableFuture::join).toList());
+            allMovies.addAll(futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
             currentPage++;
         }
 

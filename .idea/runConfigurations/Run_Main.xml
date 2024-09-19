@@ -5,7 +5,7 @@
     <envs>
       <env name="DEPLOYED_DB_NAME" value="sp1" />
       <env name="DEPLOYED_DB_PASSWORD" value="cphbusiness123" />
-      <env name="DEPLOYED_DB_URL" value="jdbc:postgresql://164.90.196.139:5432/" />
+      <env name="DEPLOYED_DB_URL" value="jdbc:postgresql://164.90.196.139:5432/sp1" />
       <env name="DEPLOYED_DB_USERNAME" value="postgres" />
       <env name="TMDB_API_KEY" value="89cb1c6c8e0bbbdec10d6d70abc22c28" />
     </envs>
