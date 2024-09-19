@@ -25,11 +25,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDTO {
 
-    @JsonIgnore
+    @JsonProperty("id")
     private int id;
-
-    @JsonIgnore
-    private String movieId;
 
     @JsonProperty("overview")
     private String overview;

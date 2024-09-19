@@ -52,27 +52,50 @@ public class ApiService {
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            // Check if the API response is successful
+            if (response.statusCode() != 200) {
+                System.err.println("Failed to fetch movies: " + response.body());
+                break; // Stop if there is an error in fetching movie data
+            }
+
             MovieResponse movieResponse = objectMapper.readValue(response.body(), MovieResponse.class);
 
             List<CompletableFuture<MovieDTO>> futures = movieResponse.getResults().stream()
                     .map(movie -> CompletableFuture.supplyAsync(() -> {
                         MovieDTO movieDTO = new MovieDTO();
-                        movieDTO.setMovieId(String.valueOf(movie.getMovieId()));
+                        movieDTO.setId(movie.getId());
                         movieDTO.setOriginalTitle(movie.getOriginalTitle());
                         movieDTO.setReleaseDate(movie.getReleaseDate());
                         movieDTO.setVoteAverage(movie.getVoteAverage());
 
                         try {
-                            // Fetch cast and directors
+                            // Construct URL for fetching cast and director information
+                            String castUrl = String.format(CAST_URL_TEMPLATE, movie.getId());
+                            System.out.println("Fetching cast and directors from: " + castUrl);
+
                             HttpRequest castRequest = HttpRequest.newBuilder()
-                                    .uri(new URI(String.format(CAST_URL_TEMPLATE, movie.getId())))
+                                    .uri(new URI(castUrl))
                                     .GET()
                                     .build();
+
                             HttpResponse<String> castResponse = client.send(castRequest, HttpResponse.BodyHandlers.ofString());
+
+                            // Check for a valid response
+                            if (castResponse.statusCode() != 200) {
+                                System.err.println("Failed to fetch cast information: " + castResponse.body());
+                                return movieDTO; // Return the movieDTO without cast/director info
+                            }
 
                             // Parse the response and extract credits
                             JsonNode rootNode = objectMapper.readTree(castResponse.body());
                             JsonNode creditsNode = rootNode.path("credits");
+
+                            // Validate that creditsNode is not empty
+                            if (creditsNode.isMissingNode()) {
+                                System.err.println("Credits not found for movie ID: " + movie.getId());
+                                return movieDTO; // Return the movieDTO without cast/director info
+                            }
 
                             // Add actors and director(s) to the DTO.
                             List<ActorDTO> actors = extractActors(creditsNode, movieDTO);
@@ -81,18 +104,21 @@ public class ApiService {
                             movieDTO.addDirectors(directors);
 
                         } catch (Exception e) {
+                            System.err.println("Error fetching cast for movie ID: " + movie.getId() + " - " + e.getMessage());
                             e.printStackTrace();
                         }
                         return movieDTO;
-                    }, pool))
+                    }))
                     .toList();
 
+            // Join the CompletableFutures to get the final MovieDTO objects
             allMovies.addAll(futures.stream().map(CompletableFuture::join).toList());
             currentPage++;
         }
 
         return allMovies;
     }
+
 
 
     private List<ActorDTO> extractActors(JsonNode creditsNode, MovieDTO movieDTO) {
