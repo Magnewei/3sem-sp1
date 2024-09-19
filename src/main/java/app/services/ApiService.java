@@ -1,8 +1,10 @@
 package app.services;
 
+
 import app.dtos.ActorDTO;
 import app.dtos.DirectorDTO;
 import app.dtos.MovieDTO;
+import app.entities.Actor;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -13,12 +15,10 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.stream.Collectors;
 
 public class ApiService {
     private static ApiService instance;
@@ -46,11 +46,18 @@ public class ApiService {
         while (currentPage <= numberOfPages) {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(API_URL + currentPage))
-                    .version(HttpClient.Version.HTTP_1_1)
+                    .header("accept", "application/json")
                     .GET()
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            // Check if the API response is successful
+            if (response.statusCode() != 200) {
+                System.err.println("Failed to fetch movies: " + response.body());
+                break; // Stop if there is an error in fetching movie data
+            }
+
             MovieResponse movieResponse = objectMapper.readValue(response.body(), MovieResponse.class);
 
             List<CompletableFuture<MovieDTO>> futures = movieResponse.getResults().stream()
@@ -60,85 +67,85 @@ public class ApiService {
                         movieDTO.setOriginalTitle(movie.getOriginalTitle());
                         movieDTO.setReleaseDate(movie.getReleaseDate());
                         movieDTO.setVoteAverage(movie.getVoteAverage());
-                        movieDTO.setGenreIds(movie.getGenreIds());
 
                         try {
-                            // Fetch cast and directors
+                            // Construct URL for fetching cast and director information
+                            String castUrl = String.format(CAST_URL_TEMPLATE, movie.getId());
+
                             HttpRequest castRequest = HttpRequest.newBuilder()
-                                    .uri(new URI(String.format(CAST_URL_TEMPLATE, movie.getId())))
+                                    .uri(new URI(castUrl))
                                     .GET()
                                     .build();
+
                             HttpResponse<String> castResponse = client.send(castRequest, HttpResponse.BodyHandlers.ofString());
+
+                            // Check for a valid response
+                            if (castResponse.statusCode() != 200) {
+                                System.err.println("Failed to fetch cast information: " + castResponse.body());
+                                return movieDTO; // Return the movieDTO without cast/director info
+                            }
 
                             // Parse the response and extract credits
                             JsonNode rootNode = objectMapper.readTree(castResponse.body());
                             JsonNode creditsNode = rootNode.path("credits");
 
-                            // Extract actors from the cast
-                            List<ActorDTO> actors = new ArrayList<>();
-                            if (creditsNode.has("cast")) {
-                                for (JsonNode castNode : creditsNode.get("cast")) {
-                                    ActorDTO actor = new ActorDTO();
-                                    actor.setId(castNode.get("id").asInt());
-                                    actor.setName(castNode.get("name").asText());
-                                    actor.setGender(castNode.get("gender").asInt());
-
-                                    List<MovieDTO> knownForMovies = new ArrayList<>();
-                                    if (castNode.has("known_for")) {
-                                        for (JsonNode knownForNode : castNode.get("known_for")) {
-                                            MovieDTO knownMovie = new MovieDTO();
-                                            knownMovie.setId(knownForNode.get("id").asInt());
-                                            knownMovie.setOriginalTitle(knownForNode.get("title").asText());
-                                            knownMovie.setReleaseDate(LocalDate.parse(knownForNode.get("release_date").asText()));
-                                            knownForMovies.add(knownMovie);
-                                        }
-                                    }
-                                    actor.setKnownFor(knownForMovies);
-                                    actors.add(actor);
-                                }
-                                movieDTO.setCast(actors);
+                            // Validate that creditsNode is not empty
+                            if (creditsNode.isMissingNode()) {
+                                System.err.println("Credits not found for movie ID: " + movie.getId());
+                                return movieDTO; // Return the movieDTO without cast/director info
                             }
 
-                            // Extract director from the crew
-                            List<DirectorDTO> directors = new ArrayList<>();
-                            if (creditsNode.has("crew")) {
-                                for (JsonNode crewNode : creditsNode.get("crew")) {
-                                    if ("Director".equalsIgnoreCase(crewNode.get("job").asText())) {
-                                        DirectorDTO director = new DirectorDTO();
-                                        director.setId(crewNode.get("id").asInt());
-                                        director.setName(crewNode.get("name").asText());
-
-                                        // Extract the 'known_for' array and map to MovieDTO
-                                        List<MovieDTO> knownForMovies = new ArrayList<>();
-                                        if (crewNode.has("known_for")) {
-                                            for (JsonNode knownForNode : crewNode.get("known_for")) {
-                                                MovieDTO knownMovie = new MovieDTO();
-                                                knownMovie.setId(knownForNode.get("id").asInt());
-                                                knownMovie.setOriginalTitle(knownForNode.get("title").asText());
-                                                knownMovie.setReleaseDate(LocalDate.parse(knownForNode.get("release_date").asText()));
-                                                knownForMovies.add(knownMovie);
-                                            }
-                                        }
-                                        director.setKnownFor(knownForMovies);  // Set knownForMovies as MovieDTO list in DirectorDTO
-
-                                        directors.add(director);
-                                    }
-                                }
-                                movieDTO.setDirectors(directors);
-                            }
+                            // Add actors and director(s) to the DTO.
+                            List<ActorDTO> actors = extractActors(creditsNode, movieDTO);
+                            List<DirectorDTO> directors = extractDirectors(creditsNode, movieDTO);
+                            movieDTO.setCast(actors);
+                            movieDTO.setDirectors(directors);
 
                         } catch (Exception e) {
+                            System.err.println("Error fetching cast for movie ID: " + movie.getId() + " - " + e.getMessage());
                             e.printStackTrace();
                         }
                         return movieDTO;
-                    }, pool))
-                    .collect(Collectors.toList());
+                    }))
+                    .toList();
 
-            allMovies.addAll(futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+            // Join the CompletableFutures to get the final MovieDTO objects
+            allMovies.addAll(futures.stream().map(CompletableFuture::join).toList());
             currentPage++;
         }
-
         return allMovies;
     }
 
+
+
+    private List<ActorDTO> extractActors(JsonNode creditsNode, MovieDTO movieDTO) {
+        List<ActorDTO> actors = new ArrayList<>();
+        JsonNode castNode = creditsNode.get("cast");
+        if (castNode != null && castNode.isArray()) {
+            for (JsonNode node : castNode) {
+                ActorDTO actor = new ActorDTO();
+                actor.setActorId(node.get("id").asInt());
+                actor.setName(node.get("name").asText());
+                actor.setGender(node.get("gender").asInt());
+                actors.add(actor);
+            }
+        }
+        return actors;
+    }
+
+    private List<DirectorDTO> extractDirectors(JsonNode creditsNode, MovieDTO movieDTO) {
+        List<DirectorDTO> directors = new ArrayList<>();
+        JsonNode crewNode = creditsNode.get("crew");
+        if (crewNode != null && crewNode.isArray()) {
+            for (JsonNode node : crewNode) {
+                if ("Director".equals(node.get("job").asText())) {
+                    DirectorDTO director = new DirectorDTO();
+                    director.setName(node.get("name").asText());
+                    director.setGender(node.get("gender").asInt());
+                    directors.add(director);
+                }
+            }
+        }
+        return directors;
+    }
 }

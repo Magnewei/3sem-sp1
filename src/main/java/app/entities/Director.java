@@ -1,11 +1,9 @@
 package app.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,18 +13,22 @@ import java.util.List;
  */
 @Entity
 @Data
+@Table(name = "directors")
 public class Director {
+
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name",nullable = false)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "gender",nullable = false)
-    private String gender;
+    @Column(name = "gender")
+    private int gender;
 
-    @ManyToMany(mappedBy = "directors")
-    private List<Movie> knownFor;
-
+    @ManyToMany(mappedBy = "directors", fetch = FetchType.LAZY)
+    @Column(name = "knownFor")
+    private List<Movie> knownFor = new ArrayList<>();
 
 }

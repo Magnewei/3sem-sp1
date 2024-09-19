@@ -1,33 +1,31 @@
 package app.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import lombok.Builder;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Purpose:
- *
- * @Author: Anton Friis Stengaard
- */
 @Entity
 @Data
+@Table(name = "actors")
 public class Actor {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name",nullable = false)
+    @Column(name = "actor_id", nullable = false)
+    private int actorId;
+
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "gender",nullable = false)
+    @Column(name = "gender")
     private int gender;
 
-    @ManyToMany(mappedBy = "cast")
-    private List<Movie> knownFor;
+    @ManyToMany(mappedBy = "cast", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @Column(name = "knownFor")
+    private List<Movie> knownFor = new ArrayList<>();
 
 }

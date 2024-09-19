@@ -2,11 +2,16 @@ package app.dtos;
 
 import app.entities.Actor;
 import app.entities.Director;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nullable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,12 +20,18 @@ import java.util.List;
  * @Author: Anton Friis Stengaard
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDTO {
+
+    @JsonProperty("id")
     private int id;
-    private String overview;
-    private List<ActorDTO> cast;
-    private List<DirectorDTO> directors;
+
+    @JsonIgnore
+    private List<DirectorDTO> directors = new ArrayList<>();;
+
+    @JsonProperty("genre_ids")
     private List<Integer> genreIds;
 
     @JsonProperty("original_title")
@@ -31,4 +42,8 @@ public class MovieDTO {
 
     @JsonProperty("vote_average")
     private double voteAverage;
+
+    @JsonIgnore
+    private List<ActorDTO> cast = new ArrayList<>();
+
 }
