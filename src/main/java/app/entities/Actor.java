@@ -12,8 +12,11 @@ import java.util.List;
 public class Actor {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "actor_id", nullable = false)
+    private int actorId;
 
     @Column(name = "name")
     private String name;
@@ -22,6 +25,7 @@ public class Actor {
     private int gender;
 
     @ManyToMany(mappedBy = "cast", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @Column(name = "knownFor")
     private List<Movie> knownFor = new ArrayList<>();
 
 }

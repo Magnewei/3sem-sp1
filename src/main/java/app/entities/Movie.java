@@ -17,8 +17,11 @@ import java.util.List;
 public class Movie {
 
     @Id
-    @Column(name = "id", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "movie_id", nullable = false)
+    private int movieId;
 
     @Column(name = "original_title")
     private String originalTitle;
@@ -35,13 +38,13 @@ public class Movie {
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
-            name = "knownFor",
+            name = "actors",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
     private List<Actor> cast;
 
-/*
+
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "directors",
@@ -50,5 +53,5 @@ public class Movie {
     )
     private List<Director> directors = new ArrayList<>();;
 
-     */
+
 }

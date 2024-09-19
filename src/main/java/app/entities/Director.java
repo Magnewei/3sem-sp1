@@ -16,8 +16,9 @@ import java.util.List;
 @Table(name = "directors")
 public class Director {
 
+
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "director_id", unique = true, nullable = false)
@@ -28,5 +29,9 @@ public class Director {
 
     @Column(name = "gender")
     private int gender;
+
+    @ManyToMany(mappedBy = "directors", fetch = FetchType.LAZY)
+    @Column(name = "knownFor")
+    private List<Movie> knownFor = new ArrayList<>();
 
 }

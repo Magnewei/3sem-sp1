@@ -25,8 +25,11 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDTO {
 
-    @JsonProperty("id")
+    @JsonIgnore
     private int id;
+
+    @JsonProperty("id")
+    private int movieId;
 
     @JsonProperty("overview")
     private String overview;
@@ -46,4 +49,21 @@ public class MovieDTO {
 
     @JsonProperty("vote_average")
     private double voteAverage;
+
+    @JsonIgnore
+    private List<ActorDTO> cast = new ArrayList<>();
+
+    @JsonIgnore
+
+    private List<DirectorDTO> crew = new ArrayList<>();
+
+
+    public void addActors(List<ActorDTO> actors) {
+        cast.addAll(actors);
+    }
+
+
+    public void addDirectors(List<DirectorDTO> directors) {
+        crew.addAll(directors);
+    }
 }

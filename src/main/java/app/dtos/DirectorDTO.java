@@ -22,13 +22,19 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DirectorDTO {
 
-    @JsonProperty("id")
+    @JsonIgnore
     private int id;
+
+    @JsonProperty("id")
+    private int directorId;
 
     @JsonProperty("name")
     private String name;
 
     @JsonProperty("gender")
     private int gender;
+
+    @JsonIgnore
+    private List<MovieDTO> knownFor = new ArrayList<>();
 
 }
