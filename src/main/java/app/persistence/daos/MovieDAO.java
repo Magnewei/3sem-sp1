@@ -12,6 +12,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Purpose:
@@ -28,6 +29,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
     @Override
     public void create(MovieDTO movieDTO) {
         Movie movie = toEntity(movieDTO);
+        System.out.println(movie.getDirectors());
 
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -107,6 +109,20 @@ public Movie toEntity(MovieDTO dto) {
     movie.setReleaseDate(dto.getReleaseDate());
     movie.setOverview(dto.getOverview());
     movie.setVoteAverage(dto.getVoteAverage());
+    //Set cast
+    if (dto.getCast() != null) {
+        List<Actor> actors = dto.getCast().stream()
+                .map(this::toActor)
+                .collect(Collectors.toList());
+        movie.setCast(actors);
+    }
+    //Set director(s)
+    if (dto.getDirectors() != null) {
+        List<Director> directors = dto.getDirectors().stream()
+                .map(this::toDirector)
+                .collect(Collectors.toList());
+        movie.setDirectors(directors);
+    }
 
 
     return movie;

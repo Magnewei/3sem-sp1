@@ -28,11 +28,7 @@ public class MovieDTO {
     @JsonProperty("id")
     private int id;
 
-    @JsonProperty("overview")
-    private String overview;
-
-    private List<ActorDTO> actors = new ArrayList<>();;
-
+    @JsonIgnore
     private List<DirectorDTO> directors = new ArrayList<>();;
 
     @JsonProperty("genre_ids")
@@ -50,16 +46,4 @@ public class MovieDTO {
     @JsonIgnore
     private List<ActorDTO> cast = new ArrayList<>();
 
-    @JsonIgnore
-    private List<DirectorDTO> crew = new ArrayList<>();
-
-
-    public void addActors(List<ActorDTO> actors) {
-        cast.addAll(actors);
-    }
-
-
-    public void addDirectors(List<DirectorDTO> directors) {
-        crew.addAll(directors);
-    }
 }

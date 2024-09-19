@@ -47,7 +47,6 @@ public class ApiService {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(API_URL + currentPage))
                     .header("accept", "application/json")
-                    .version(HttpClient.Version.HTTP_2)
                     .GET()
                     .build();
 
@@ -72,7 +71,6 @@ public class ApiService {
                         try {
                             // Construct URL for fetching cast and director information
                             String castUrl = String.format(CAST_URL_TEMPLATE, movie.getId());
-                            System.out.println("Fetching cast and directors from: " + castUrl);
 
                             HttpRequest castRequest = HttpRequest.newBuilder()
                                     .uri(new URI(castUrl))
@@ -100,8 +98,8 @@ public class ApiService {
                             // Add actors and director(s) to the DTO.
                             List<ActorDTO> actors = extractActors(creditsNode, movieDTO);
                             List<DirectorDTO> directors = extractDirectors(creditsNode, movieDTO);
-                            movieDTO.addActors(actors);
-                            movieDTO.addDirectors(directors);
+                            movieDTO.setCast(actors);
+                            movieDTO.setDirectors(directors);
 
                         } catch (Exception e) {
                             System.err.println("Error fetching cast for movie ID: " + movie.getId() + " - " + e.getMessage());
@@ -115,7 +113,6 @@ public class ApiService {
             allMovies.addAll(futures.stream().map(CompletableFuture::join).toList());
             currentPage++;
         }
-
         return allMovies;
     }
 
@@ -130,11 +127,9 @@ public class ApiService {
                 actor.setActorId(node.get("id").asInt());
                 actor.setName(node.get("name").asText());
                 actor.setGender(node.get("gender").asInt());
-                actor.getKnownFor().add(movieDTO);
                 actors.add(actor);
             }
         }
-
         return actors;
     }
 
@@ -145,9 +140,8 @@ public class ApiService {
             for (JsonNode node : crewNode) {
                 if ("Director".equals(node.get("job").asText())) {
                     DirectorDTO director = new DirectorDTO();
-                    director.setDirectorId(node.get("id").asInt());
                     director.setName(node.get("name").asText());
-                    director.getKnownFor().add(movieDTO);
+                    director.setGender(node.get("gender").asInt());
                     directors.add(director);
                 }
             }

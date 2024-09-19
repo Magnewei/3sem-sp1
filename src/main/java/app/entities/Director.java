@@ -21,9 +21,6 @@ public class Director {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "director_id", unique = true, nullable = false)
-    private int directorId;
-
     @Column(name = "name")
     private String name;
 

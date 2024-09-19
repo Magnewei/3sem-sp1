@@ -1,5 +1,7 @@
 package app.services;
 
+import app.dtos.ActorDTO;
+import app.dtos.DirectorDTO;
 import app.dtos.MovieDTO;
 import app.entities.Actor;
 import app.entities.Director;
@@ -15,8 +17,11 @@ import lombok.NoArgsConstructor;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 /**
  * Purpose:
@@ -62,7 +67,7 @@ public class MovieService {
     public List<MovieDTO> sortByActor(Actor actor) {
         List<MovieDTO> allMovies = movieDAO.getAll();
         allMovies.stream()
-                .filter(m -> m.getActors().contains(actor))
+                .filter(m -> m.getCast().contains(actor))
                 .forEach(System.out::println);
         return allMovies;
     }
@@ -70,7 +75,7 @@ public class MovieService {
     public List<MovieDTO> sortByDirector(Director director) {
         List<MovieDTO> allMovies = movieDAO.getAll();
         allMovies.stream()
-                .filter(m -> m.getActors().contains(director))
+                .filter(m -> m.getCast().contains(director))
                 .forEach(System.out::println);
 
         return allMovies;
@@ -78,16 +83,38 @@ public class MovieService {
 
     public void saveMoviesToDatabase() {
         try {
-            List<MovieDTO> movies = apiService.fetchMoviesFromApiEndpoint(1);
+            List<MovieDTO> movies = apiService.fetchMoviesFromApiEndpoint(48);
 
-             for(MovieDTO movie : movies) {
-                 movieDAO.create(movie);
-             }
+            // Use sets to track unique actors and directors
+            Set<ActorDTO> uniqueActors = new HashSet<>();
+            Set<DirectorDTO> uniqueDirectors = new HashSet<>();
 
+            movies.parallelStream().forEach(movie -> {
+                // Filter out duplicate actors
+                List<ActorDTO> filteredActors = movie.getCast().stream()
+                        .filter(actor -> uniqueActors.add(actor)) // add() returns false if the actor already exists
+                        .collect(Collectors.toList());
+
+                // Filter out duplicate directors
+                List<DirectorDTO> filteredDirectors = movie.getDirectors().stream()
+                        .filter(director -> uniqueDirectors.add(director)) // add() returns false if the director already exists
+                        .collect(Collectors.toList());
+
+                // Set the filtered lists back to the movie
+                movie.setCast(filteredActors);
+                movie.setDirectors(filteredDirectors);
+
+                // Persist the movie (with filtered actors and directors)
+                movieDAO.create(movie);
+                System.out.println("Persisted movie: " + movie.getOriginalTitle());
+            });
         } catch (URISyntaxException | InterruptedException | IOException e) {
             System.err.println(e.getMessage());
             throw new JpaException("Could not persist movies to the database.");
         }
     }
+
+
+
 }
 

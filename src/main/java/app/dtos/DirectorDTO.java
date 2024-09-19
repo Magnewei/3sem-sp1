@@ -21,11 +21,8 @@ import java.util.List;
 @NoArgsConstructor
 public class DirectorDTO {
 
-    @JsonIgnore
+    @JsonProperty("id")
     private int id;
-
-    @JsonIgnore
-    private int directorId;
 
     @JsonProperty("name")
     private String name;

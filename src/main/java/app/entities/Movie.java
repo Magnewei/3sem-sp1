@@ -20,14 +20,8 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "movie_id", nullable = false)
-    private int movieId;
-
     @Column(name = "original_title")
     private String originalTitle;
-
-    @Column(name = "overview")
-    private String overview;
 
     @Column(name = "release_date")
     private LocalDate releaseDate;
