@@ -29,7 +29,6 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
     @Override
     public void create(MovieDTO movieDTO) {
         Movie movie = toEntity(movieDTO);
-        System.out.println(movie.getDirectors());
 
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -107,7 +106,6 @@ public Movie toEntity(MovieDTO dto) {
     Movie movie = new Movie();
     movie.setOriginalTitle(dto.getOriginalTitle());
     movie.setReleaseDate(dto.getReleaseDate());
-    movie.setOverview(dto.getOverview());
     movie.setVoteAverage(dto.getVoteAverage());
     //Set cast
     if (dto.getCast() != null) {
@@ -161,7 +159,6 @@ public MovieDTO toDTO(Movie movie) {
 
     dto.setOriginalTitle(movie.getOriginalTitle());
     dto.setReleaseDate(movie.getReleaseDate());
-    dto.setOverview(movie.getOverview());
     dto.setVoteAverage(movie.getVoteAverage());
 
     return dto;
