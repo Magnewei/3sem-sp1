@@ -28,8 +28,8 @@ public class MovieDTO {
     @JsonIgnore
     private int id;
 
-    @JsonProperty("id")
-    private int movieId;
+    @JsonIgnore
+    private String movieId;
 
     @JsonProperty("overview")
     private String overview;
@@ -54,7 +54,6 @@ public class MovieDTO {
     private List<ActorDTO> cast = new ArrayList<>();
 
     @JsonIgnore
-
     private List<DirectorDTO> crew = new ArrayList<>();
 
 

@@ -36,5 +36,4 @@ public class ActorDTO {
 
     @JsonIgnore
     private List<MovieDTO> knownFor = new ArrayList<>();
-
 }

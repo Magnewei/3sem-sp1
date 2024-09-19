@@ -15,12 +15,10 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.stream.Collectors;
 
 public class ApiService {
     private static ApiService instance;
@@ -48,6 +46,8 @@ public class ApiService {
         while (currentPage <= numberOfPages) {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(new URI(API_URL + currentPage))
+                    .header("accept", "application/json")
+                    .version(HttpClient.Version.HTTP_2)
                     .GET()
                     .build();
 
@@ -57,7 +57,7 @@ public class ApiService {
             List<CompletableFuture<MovieDTO>> futures = movieResponse.getResults().stream()
                     .map(movie -> CompletableFuture.supplyAsync(() -> {
                         MovieDTO movieDTO = new MovieDTO();
-                        movieDTO.setMovieId(movie.getId());
+                        movieDTO.setMovieId(String.valueOf(movie.getMovieId()));
                         movieDTO.setOriginalTitle(movie.getOriginalTitle());
                         movieDTO.setReleaseDate(movie.getReleaseDate());
                         movieDTO.setVoteAverage(movie.getVoteAverage());
@@ -97,28 +97,30 @@ public class ApiService {
 
     private List<ActorDTO> extractActors(JsonNode creditsNode, MovieDTO movieDTO) {
         List<ActorDTO> actors = new ArrayList<>();
-        if (creditsNode.has("credits")) {
-            for (JsonNode castNode : creditsNode.get("cast")) {
+        JsonNode castNode = creditsNode.get("cast");
+        if (castNode != null && castNode.isArray()) {
+            for (JsonNode node : castNode) {
                 ActorDTO actor = new ActorDTO();
-                actor.setActorId(castNode.get("id").asInt());
-                actor.setName(castNode.get("name").asText());
-                actor.setGender(castNode.get("gender").asInt());
+                actor.setActorId(node.get("id").asInt());
+                actor.setName(node.get("name").asText());
+                actor.setGender(node.get("gender").asInt());
                 actor.getKnownFor().add(movieDTO);
                 actors.add(actor);
             }
         }
+
         return actors;
     }
 
-
     private List<DirectorDTO> extractDirectors(JsonNode creditsNode, MovieDTO movieDTO) {
         List<DirectorDTO> directors = new ArrayList<>();
-        if (creditsNode.has("crew")) {
-            for (JsonNode crewNode : creditsNode.get("crew")) {
-                if (crewNode.get("job").asText().equals("Director")) {
+        JsonNode crewNode = creditsNode.get("crew");
+        if (crewNode != null && crewNode.isArray()) {
+            for (JsonNode node : crewNode) {
+                if ("Director".equals(node.get("job").asText())) {
                     DirectorDTO director = new DirectorDTO();
-                    director.setDirectorId(crewNode.get("id").asInt());
-                    director.setName(crewNode.get("name").asText());
+                    director.setDirectorId(node.get("id").asInt());
+                    director.setName(node.get("name").asText());
                     director.getKnownFor().add(movieDTO);
                     directors.add(director);
                 }
@@ -126,5 +128,4 @@ public class ApiService {
         }
         return directors;
     }
-
 }

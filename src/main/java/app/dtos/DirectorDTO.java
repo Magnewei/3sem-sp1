@@ -19,13 +19,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class DirectorDTO {
 
     @JsonIgnore
     private int id;
 
-    @JsonProperty("id")
+    @JsonIgnore
     private int directorId;
 
     @JsonProperty("name")
