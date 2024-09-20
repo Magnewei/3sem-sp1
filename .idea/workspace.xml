@@ -8,27 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a71957f6-c8ca-4f9a-8304-2c5f35ec1814" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/java/MovieDAOTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/class_diagram.puml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/ActorDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dtos/ActorDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/DirectorDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dtos/DirectorDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/MovieDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dtos/MovieDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/Actor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/Actor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/Director.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/Director.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/Movie.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/exceptions/ApiException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/exceptions/ApiException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/exceptions/JpaException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/exceptions/JpaException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/HibernateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/HibernateConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/daos/GenericDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/GenericDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MovieDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MovieDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MoviePersonDAO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/ApiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/CreditsResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/MovieResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/MovieResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/MovieService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/TestExample.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +27,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="cleanup" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -86,33 +66,33 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Application.Run Main.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.MovieDAOTest.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;cleanup&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/magnusnorgaardweihager/Documents/GitHub/CPH-BUSINESS/HibernateTemplate&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.Run Main.executor": "Run",
+    "JUnit.MovieDAOTest.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "search__by__title",
+    "go.import.settings.migrated": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/magnusnorgaardweihager/Documents/GitHub/CPH-BUSINESS/HibernateTemplate",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -127,7 +107,7 @@
       <recent name="app.Persistence" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.MovieDAOTest">
+  <component name="RunManager" selected="Application.Run Main">
     <configuration name="MovieDAOTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="HibernateTemplate" />
       <option name="PACKAGE_NAME" value="" />

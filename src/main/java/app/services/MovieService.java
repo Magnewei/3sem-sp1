@@ -64,10 +64,9 @@ public class MovieService {
      * @return a list of MovieDTOs that match the given title
      */
     public List<MovieDTO> searchByTitle(String title) {
-        List<MovieDTO> allMovies = movieDAO.getAll();
-        return allMovies.stream()
-                .filter(m -> m.getOriginalTitle().equalsIgnoreCase(title))
-                .collect(Collectors.toList());
+        List<MovieDTO> allMovies = movieDAO.getMoviesByTitle(title);
+
+        return allMovies;
     }
 
     /**
