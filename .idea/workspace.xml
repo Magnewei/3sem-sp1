@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_INJECTED_CODE" value="false" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a71957f6-c8ca-4f9a-8304-2c5f35ec1814" name="Changes" comment="Kan kun uploade movies. Laver korrekt DB.">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="a71957f6-c8ca-4f9a-8304-2c5f35ec1814" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/test/java/MovieDAOTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/class_diagram.puml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/ActorDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dtos/ActorDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/DirectorDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dtos/DirectorDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/dtos/MovieDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/dtos/MovieDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/Actor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/Actor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/Director.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/Director.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/entities/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/entities/Movie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/exceptions/ApiException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/exceptions/ApiException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/exceptions/JpaException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/exceptions/JpaException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/HibernateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/HibernateConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/daos/GenericDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/GenericDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MovieDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MovieDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/persistence/daos/MoviePersonDAO.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/services/ApiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/ApiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/CreditsResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/services/MovieResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/MovieResponse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/services/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/services/MovieService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestExample.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +58,14 @@
     &quot;assignee&quot;: &quot;Magnewei&quot;
   }
 }</component>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="master" />
+        <option value="develop" />
+      </list>
+    </option>
+  </component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Magnewei/3sem-sp1&quot;,
@@ -67,11 +90,12 @@
   &quot;keyToString&quot;: {
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Application.Run Main.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.MovieDAOTest.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#21 on implement__db&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;cleanup&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
@@ -84,7 +108,8 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.grazie&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -101,6 +126,22 @@
       <recent name="" />
       <recent name="app.Persistence" />
     </key>
+  </component>
+  <component name="RunManager" selected="JUnit.MovieDAOTest">
+    <configuration name="MovieDAOTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="HibernateTemplate" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="MovieDAOTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.MovieDAOTest" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -136,6 +177,7 @@
       <workItem from="1726613872062" duration="3459000" />
       <workItem from="1726692655317" duration="12257000" />
       <workItem from="1726733412646" duration="7593000" />
+      <workItem from="1726819178844" duration="390000" />
     </task>
     <task id="LOCAL-00001" summary="Init commit">
       <option name="closed" value="true" />
@@ -338,7 +380,8 @@
     <MESSAGE value="Added DB half baked db support" />
     <MESSAGE value="Database errors but it runs." />
     <MESSAGE value="Kan kun uploade movies. Laver korrekt DB." />
-    <option name="LAST_COMMIT_MESSAGE" value="Kan kun uploade movies. Laver korrekt DB." />
+    <MESSAGE value="Chatten er Gordon Ramsey" />
+    <option name="LAST_COMMIT_MESSAGE" value="Chatten er Gordon Ramsey" />
   </component>
   <component name="VgoProject">
     <integration-enabled>false</integration-enabled>

@@ -1,0 +1,134 @@
+@startuml sp1
+
+component TMDB_API [
+The Movie Database API
+]
+
+database Database [
+Postgres Database
+]
+
+' Styling
+skinparam ArrowThickness 3
+skinparam linetype ortho
+skinparam ArrowColor Green
+'
+
+package "dtos" {
+    class ActorDTO {
+        - id: int
+        + actorId: int
+        + name: String
+        + gender: int
+        - knownFor: List<MovieDTO>
+    }
+
+    class DirectorDTO {
+        + id: int
+        + name: String
+        + gender: int
+        - knownFor: List<MovieDTO>
+    }
+
+    class MovieDTO {
+        + id: int
+        - directors: List<DirectorDTO>
+        + genreIds: List<Integer>
+        + originalTitle: String
+        + releaseDate: LocalDate
+        + voteAverage: double
+        - cast: List<ActorDTO>
+    }
+}
+
+package "entities" {
+    class Actor {
+        + id: int
+        + actorId: int
+        + name: String
+        + gender: int
+        + knownFor: List<Movie>
+    }
+
+    class Director {
+        + id: int
+        + name: String
+        + gender: int
+        + knownFor: List<Movie>
+    }
+
+    class Movie {
+        + id: int
+        + originalTitle: String
+        + releaseDate: LocalDate
+        + voteAverage: double
+        + cast: List<Actor>
+        + directors: List<Director>
+    }
+}
+
+
+
+package "exceptions" {
+    class ApiException {
+        +ApiException(String message)
+    }
+
+    class JpaException {
+        +JpaException(String message)
+    }
+}
+
+package "daos" {
+    interface GenericDAO<T, E> {
+        + create(T type)
+        + delete(T type)
+        + getById(int id): T
+        + getAll(): List<T>
+        + update(T type)
+        + toEntity(T dto): E
+        + toDTO(E entity): T
+    }
+
+    class MovieDAO implements GenericDAO {
+        + create(MovieDTO movieDTO)
+        + delete(MovieDTO movieDTO)
+        + getById(int id): MovieDTO
+        + getAll(): List<MovieDTO>
+        + update(MovieDTO movieDTO)
+        + toEntity(MovieDTO dto): Movie
+        + toDTO(Movie movie): MovieDTO
+    }
+}
+
+package "services" {
+    class ApiService {
+        + fetchMoviesFromApiEndpoint(int numberOfPages): List<MovieDTO>
+        + fetchMoviesFromPage(int page): List<MovieDTO>
+        + createMovieDTO(MovieDTO movie, HttpClient client, ObjectMapper objectMapper): MovieDTO
+        + fetchCastAndDirectorInfo(MovieDTO movie, MovieDTO movieDTO, HttpClient client, ObjectMapper objectMapper): void
+        + extractActors(JsonNode creditsNode): List<ActorDTO>
+        + extractDirectors(JsonNode creditsNode): List<DirectorDTO>
+    }
+
+    class MovieService {
+        + sortByTitle(): List<MovieDTO>
+        + sortByReleaseDate(): List<MovieDTO>
+        + sortByActor(Actor actor): List<MovieDTO>
+        + sortByDirector(Director director): List<MovieDTO>
+        + saveMoviesToDatabase(): void
+    }
+}
+
+TMDB_API --> ApiService : Uses
+GenericDAO --> Database : Manages
+MovieService --> MovieDAO : Uses
+MovieService --> ApiService : Uses
+MovieDAO --> Movie : Manages
+MovieDTO --> Movie : Maps to/from
+JpaException <|-- MovieDAO : Throws
+ApiException <|-- ApiService : Throws
+Movie --> Actor
+Movie --> Director
+
+@enduml

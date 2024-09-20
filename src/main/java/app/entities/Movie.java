@@ -29,13 +29,11 @@ public class Movie {
     @Column(name = "vote_average")
     private double voteAverage;
 
-
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "actors_movies",
             joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "actor_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private List<Actor> cast;
 
 
@@ -43,9 +41,6 @@ public class Movie {
     @JoinTable(
             name = "directors_movies",
             joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "director_id")
-    )
-    private List<Director> directors = new ArrayList<>();;
-
-
+            inverseJoinColumns = @JoinColumn(name = "director_id"))
+    private List<Director> directors = new ArrayList<>();
 }
