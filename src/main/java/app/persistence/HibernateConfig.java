@@ -2,6 +2,7 @@ package app.persistence;
 
 import app.entities.Actor;
 import app.entities.Director;
+import app.entities.Genre;
 import app.entities.Movie;
 import app.enums.HibernateConfigState;
 import jakarta.persistence.EntityManagerFactory;
@@ -22,6 +23,7 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Movie.class);
         configuration.addAnnotatedClass(Director.class);
         configuration.addAnnotatedClass(Actor.class);
+        configuration.addAnnotatedClass(Genre.class);
     }
 
     private static EntityManagerFactory getEntityManagerFactory(Configuration configuration, Properties props) {

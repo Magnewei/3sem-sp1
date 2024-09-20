@@ -7,7 +7,10 @@ import app.persistence.HibernateConfig;
 import app.persistence.daos.MovieDAO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -112,5 +115,27 @@ public class MovieDAOTest {
         MovieDTO deletedMovie = movieDAO.getById(persistedMovieDTO.getId());
 
         assertNull(deletedMovie, "Movie should be null after deletion.");
+    }
+
+
+    // TODO: Implement the following tests
+    @Test
+    void persistGenres() {
+    }
+
+    @Test
+    void getTotalAverageRating() {
+    }
+
+    @Test
+    void getTop10LowestRatedMovies() {
+    }
+
+    @Test
+    void getTop10HighestRatedMovies() {
+    }
+
+    @Test
+    void getMoviesByTitle() {
     }
 }

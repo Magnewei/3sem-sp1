@@ -112,7 +112,6 @@ public class MovieService {
 
     /**
      * Fetches movies from the API, filters out duplicate actors and directors, and saves the movies to the database.
-     *
      * This method uses sets to ensure that only unique actors and directors are added to each movie.
      *
      * @throws JpaException if there is an error persisting movies to the database
@@ -125,7 +124,7 @@ public class MovieService {
             Set<ActorDTO> uniqueActors = new HashSet<>();
             Set<DirectorDTO> uniqueDirectors = new HashSet<>();
 
-            movies.parallelStream().forEach(movie -> {
+           movies.parallelStream().forEach(movie -> {;
 
                 // Filter out duplicate actors
                 List<ActorDTO> filteredActors = movie.getCast().stream()
@@ -142,6 +141,7 @@ public class MovieService {
 
                 movieDAO.create(movie);
             });
+
         } catch (URISyntaxException | InterruptedException | IOException e) {
             System.err.println(e.getMessage());
             throw new JpaException("Could not persist movies to the database.");

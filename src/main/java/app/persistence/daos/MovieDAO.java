@@ -2,9 +2,11 @@ package app.persistence.daos;
 
 import app.dtos.ActorDTO;
 import app.dtos.DirectorDTO;
+import app.dtos.GenreDTO;
 import app.dtos.MovieDTO;
 import app.entities.Actor;
 import app.entities.Director;
+import app.entities.Genre;
 import app.entities.Movie;
 import app.exceptions.JpaException;
 import jakarta.persistence.EntityExistsException;
@@ -12,6 +14,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,29 +35,62 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         emf = entityManagerFactory;
     }
 
-    /**
-     * Creates a new Movie entity in the database from the given MovieDTO.
-     *
-     * @param movieDTO the {@link MovieDTO} object to be persisted.
-     * @throws JpaException if the movie already exists or there is an error creating the movie.
-     */
+    @Transactional
+    public void persistGenres(List<Genre> genres) {
+        if (genres == null || genres.isEmpty()) return;
+
+        try (var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            for (Genre genre : genres) {
+                List<Genre> existingGenres = em.createQuery("SELECT g FROM Genre g WHERE g.genre = :genreName", Genre.class)
+                        .setParameter("genreName", genre.getGenre())
+                        .getResultList();
+
+                if (existingGenres.isEmpty()) {
+                    // Save the genre if it's not in the database & flush to clear the queue.
+                    em.persist(genre);
+                    em.flush();
+                }
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            throw new JpaException("Could not persist genres. " + e.getMessage());
+        }
+    }
+
+    // Updated create method to ensure genres are managed before movie is saved
     @Override
     public MovieDTO create(MovieDTO movieDTO) {
         Movie movie = toEntity(movieDTO);
 
+        // Persist genres first to ensure they are managed
+        persistGenres(movie.getGenres());
+
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            em.persist(movie);
+            // Attach managed genres to the movie to avoid transient object exceptions
+            List<Genre> managedGenres = new ArrayList<>();
+            for (Genre genre : movie.getGenres()) {
+                Genre managedGenre = em.find(Genre.class, genre.getId());
+                if (managedGenre != null) {
+                    managedGenres.add(managedGenre);
+                }
+            }
+            movie.setGenres(managedGenres);
+
+            em.merge(movie);  // Merge ensures both new and existing entities are managed properly
             em.getTransaction().commit();
 
             movieDTO.setId(movie.getId());
         } catch (EntityExistsException e) {
-            throw new JpaException("Movie already exists.");
+            throw new JpaException("Movie already exists." + e.getMessage());
         } catch (Exception e) {
-            throw new JpaException("Could not create movie.");
+            throw new JpaException("Could not create movie." + e.getMessage() + e.getCause());
         }
         return movieDTO;
     }
+
 
     /**
      * Deletes the given Movie entity from the database.
@@ -72,7 +108,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
             em.getTransaction().commit();
 
         } catch (Exception e) {
-            throw new JpaException("Could not delete movie");
+            throw new JpaException("Could not delete movie" + e.getMessage());
         }
     }
 
@@ -113,7 +149,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
             return movies.stream().map(this::toDTO).toList();
 
         } catch (Exception e) {
-            throw new JpaException("Could not get all movies.");
+            throw new JpaException("Could not get all movies." + e.getMessage());
         }
     }
 
@@ -133,7 +169,81 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
             em.getTransaction().commit();
 
         } catch (Exception e) {
-            throw new JpaException("Could not update movie.");
+            throw new JpaException("Could not update movie." + e.getMessage());
+        }
+    }
+
+    /**
+     * Gets the total average rating of all movies in the database.
+     *
+     * @return the average rating of all movies.
+     * @throws JpaException if there is an error retrieving the average rating.
+     */
+    public double getTotalAverageRating() {
+        try (var em = emf.createEntityManager()) {
+            Double averageRating = em.createQuery("SELECT AVG(m.voteAverage) FROM Movie m", Double.class)
+                    .getSingleResult();
+
+            return averageRating != null ? averageRating : 0.0;
+
+        } catch (Exception e) {
+            throw new JpaException("Could not get total average rating." + e.getMessage());
+        }
+    }
+
+    /**
+     * Gets the top-10 lowest rated movies in the database.
+     *
+     * @return a list of the top-10 lowest rated movies.
+     * @throws JpaException if there is an error retrieving the movies.
+     */
+    public List<MovieDTO> getTop10LowestRatedMovies() {
+        try (var em = emf.createEntityManager()) {
+            List<Movie> movies = em.createQuery("SELECT m FROM Movie m ORDER BY m.voteAverage ASC", Movie.class)
+                    .setMaxResults(10)
+                    .getResultList();
+
+            return movies.stream().map(this::toDTO).collect(Collectors.toList());
+
+        } catch (Exception e) {
+            throw new JpaException("Could not get top-10 lowest rated movies." + e.getMessage());
+        }
+    }
+
+    /**
+     * Gets the top-10 highest rated movies in the database.
+     *
+     * @return a list of the top-10 highest rated movies.
+     * @throws JpaException if there is an error retrieving the movies.
+     */
+    public List<MovieDTO> getTop10HighestRatedMovies() {
+        try (var em = emf.createEntityManager()) {
+            List<Movie> movies = em.createQuery("SELECT m FROM Movie m ORDER BY m.voteAverage DESC", Movie.class)
+                    .setMaxResults(10)
+                    .getResultList();
+
+            return movies.stream().map(this::toDTO).collect(Collectors.toList());
+
+        } catch (Exception e) {
+            throw new JpaException("Could not get top-10 highest rated movies." + e.getMessage());
+        }
+    }
+
+    /**
+     * Retrieves all movies with the given title.
+     *
+     * @param title the title of the movies to retrieve.
+     * @return a list of MovieDTOs with the given title.
+     * @throws JpaException if there is an error retrieving the movies.
+     */
+    public List<MovieDTO> getMoviesByTitle(String title) {
+        try (var em = emf.createEntityManager()) {
+            List<Movie> movies = em.createQuery("SELECT m FROM Movie m WHERE m.originalTitle = :title", Movie.class)
+                    .setParameter("title", title)
+                    .getResultList();
+            return movies.stream().map(this::toDTO).collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new JpaException("Could not get movies by title.");
         }
     }
 
@@ -146,12 +256,15 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
     @Override
     public Movie toEntity(MovieDTO dto) {
         if (dto == null) return null;
-
         Movie movie = new Movie();
-        movie.setId(dto.getId());
+
         movie.setOriginalTitle(dto.getOriginalTitle());
         movie.setReleaseDate(dto.getReleaseDate());
         movie.setVoteAverage(dto.getVoteAverage());
+
+        if (dto.getId() != 0) {
+            movie.setId(dto.getId());
+        }
 
         // Set cast
         if (dto.getCast() != null) {
@@ -168,8 +281,57 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
                     .collect(Collectors.toList());
             movie.setDirectors(directors);
         }
+
+        // Set genres. Using a normal loop for readability, due to conversion from Integer to an object.
+        if (dto.getGenres() != null && !dto.getGenres().isEmpty()) {
+            List<Genre> genres = new ArrayList<>();
+
+            for (Integer genreDTO : dto.getGenres()) {
+                Genre genre = new Genre();
+                genre.setGenre(getGenreNameById(genreDTO));
+                genres.add(genre);
+            }
+
+            movie.setGenres(genres);
+        }
+
         return movie;
     }
+
+    private Genre toGenre(GenreDTO dto) {
+        if (dto == null) return null;
+
+        // Do not persist the ID of the entity.
+        Genre genre = new Genre();
+        genre.setGenre(dto.getGenreName());
+        return genre;
+    }
+
+    private String getGenreNameById(int id) {
+        return switch (id) {
+            case 28 -> "ACTION";
+            case 12 -> "ADVENTURE";
+            case 16 -> "ANIMATION";
+            case 35 -> "COMEDY";
+            case 80 -> "CRIME";
+            case 99 -> "DOCUMENTARY";
+            case 18 -> "DRAMA";
+            case 10751 -> "FAMILY";
+            case 14 -> "FANTASY";
+            case 36 -> "HISTORY";
+            case 27 -> "HORROR";
+            case 10402 -> "MUSIC";
+            case 9648 -> "MYSTERY";
+            case 10749 -> "ROMANCE";
+            case 878 -> "SCIENCE_FICTION";
+            case 10770 -> "TV_MOVIE";
+            case 53 -> "THRILLER";
+            case 10752 -> "WAR";
+            case 37 -> "WESTERN";
+            default -> throw new IllegalArgumentException("No genre found with ID: " + id);
+        };
+    }
+
 
     /**
      * Converts an ActorDTO to an Actor entity.
@@ -257,79 +419,5 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         dto.setName(director.getName());
         dto.setGender(director.getGender());
         return dto;
-    }
-
-    /**
-     * Gets the total average rating of all movies in the database.
-     *
-     * @return the average rating of all movies.
-     * @throws JpaException if there is an error retrieving the average rating.
-     */
-    public double getTotalAverageRating() {
-        try (var em = emf.createEntityManager()) {
-            Double averageRating = em.createQuery("SELECT AVG(m.voteAverage) FROM Movie m", Double.class)
-                    .getSingleResult();
-
-            return averageRating != null ? averageRating : 0.0;
-
-        } catch (Exception e) {
-            throw new JpaException("Could not get total average rating.");
-        }
-    }
-
-    /**
-     * Gets the top-10 lowest rated movies in the database.
-     *
-     * @return a list of the top-10 lowest rated movies.
-     * @throws JpaException if there is an error retrieving the movies.
-     */
-    public List<MovieDTO> getTop10LowestRatedMovies() {
-        try (var em = emf.createEntityManager()) {
-            List<Movie> movies = em.createQuery("SELECT m FROM Movie m ORDER BY m.voteAverage ASC", Movie.class)
-                    .setMaxResults(10)
-                    .getResultList();
-
-            return movies.stream().map(this::toDTO).collect(Collectors.toList());
-
-        } catch (Exception e) {
-            throw new JpaException("Could not get top-10 lowest rated movies.");
-        }
-    }
-
-    /**
-     * Gets the top-10 highest rated movies in the database.
-     *
-     * @return a list of the top-10 highest rated movies.
-     * @throws JpaException if there is an error retrieving the movies.
-     */
-    public List<MovieDTO> getTop10HighestRatedMovies() {
-        try (var em = emf.createEntityManager()) {
-            List<Movie> movies = em.createQuery("SELECT m FROM Movie m ORDER BY m.voteAverage DESC", Movie.class)
-                    .setMaxResults(10)
-                    .getResultList();
-
-            return movies.stream().map(this::toDTO).collect(Collectors.toList());
-
-        } catch (Exception e) {
-            throw new JpaException("Could not get top-10 highest rated movies.");
-        }
-    }
-
-    /**
-     * Retrieves all movies with the given title.
-     *
-     * @param title the title of the movies to retrieve.
-     * @return a list of MovieDTOs with the given title.
-     * @throws JpaException if there is an error retrieving the movies.
-     */
-    public List<MovieDTO> getMoviesByTitle(String title) {
-        try (var em = emf.createEntityManager()) {
-            List<Movie> movies = em.createQuery("SELECT m FROM Movie m WHERE m.originalTitle = :title", Movie.class)
-                    .setParameter("title", title)
-                    .getResultList();
-            return movies.stream().map(this::toDTO).collect(Collectors.toList());
-        } catch (Exception e) {
-            throw new JpaException("Could not get movies by title.");
-        }
     }
 }
