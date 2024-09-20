@@ -1,11 +1,8 @@
 import app.dtos.ActorDTO;
 import app.dtos.DirectorDTO;
 import app.dtos.MovieDTO;
-import app.entities.Actor;
-import app.entities.Director;
 import app.entities.Movie;
 import app.enums.HibernateConfigState;
-import app.exceptions.JpaException;
 import app.persistence.HibernateConfig;
 import app.persistence.daos.MovieDAO;
 import jakarta.persistence.EntityManager;

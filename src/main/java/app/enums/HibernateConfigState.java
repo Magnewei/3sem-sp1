@@ -1,5 +1,6 @@
 package app.enums;
 
 public enum HibernateConfigState {
-    NORMAL, TEST
+    NORMAL,
+    TEST
 }

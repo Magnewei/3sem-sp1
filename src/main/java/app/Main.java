@@ -7,8 +7,6 @@ import app.services.MovieService;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Main {
     final static EntityManagerFactory entityManagerFactory = HibernateConfig.getEntityManagerFactoryConfig(HibernateConfigState.NORMAL);
@@ -22,7 +20,5 @@ public class Main {
         System.out.println("\nMovies sorted by title:");
         List<MovieDTO> moviesSortedByTitle = movieService.sortByTitle();
         moviesSortedByTitle.forEach(System.out::println);
-
-
     }
 }
