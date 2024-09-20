@@ -58,6 +58,19 @@ public class MovieService {
     }
 
     /**
+     * Searches for movies by their original title.
+     *
+     * @param title the title to search for
+     * @return a list of MovieDTOs that match the given title
+     */
+    public List<MovieDTO> searchByTitle(String title) {
+        List<MovieDTO> allMovies = movieDAO.getAll();
+        return allMovies.stream()
+                .filter(m -> m.getOriginalTitle().equalsIgnoreCase(title))
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Sorts and prints all movies by their release date in ascending order.
      *
      * @return a list of MovieDTOs sorted by their release date
