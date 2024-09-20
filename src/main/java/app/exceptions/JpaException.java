@@ -4,7 +4,9 @@ import ch.qos.logback.classic.Logger;
 import lombok.Getter;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ *  Thrown when an exception occurs in the JPA layer.
+ */
 @Getter
 public class JpaException extends RuntimeException {
 

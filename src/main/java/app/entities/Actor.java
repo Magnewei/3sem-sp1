@@ -24,7 +24,7 @@ public class Actor {
     @Column(name = "gender")
     private int gender;
 
-    @ManyToMany(mappedBy = "cast", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "cast")
     @Column(name = "knownFor")
     private List<Movie> knownFor = new ArrayList<>();
 

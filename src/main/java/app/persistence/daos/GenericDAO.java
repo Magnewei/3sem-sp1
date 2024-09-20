@@ -1,7 +1,6 @@
 package app.persistence.daos;
 
 import java.util.List;
-import java.util.Set;
 
 public interface GenericDAO<T, E> {
     void create(T type);

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +23,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDTO {
 
@@ -29,7 +31,7 @@ public class MovieDTO {
     private int id;
 
     @JsonIgnore
-    private List<DirectorDTO> directors = new ArrayList<>();;
+    private List<DirectorDTO> directors = new ArrayList<>();
 
     @JsonProperty("genre_ids")
     private List<Integer> genreIds;
@@ -45,5 +47,4 @@ public class MovieDTO {
 
     @JsonIgnore
     private List<ActorDTO> cast = new ArrayList<>();
-
 }
