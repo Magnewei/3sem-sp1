@@ -108,6 +108,7 @@ public class ApiService {
     private MovieDTO createMovieDTO(MovieDTO movie, HttpClient client, ObjectMapper objectMapper) {
         MovieDTO movieDTO = new MovieDTO();
         movieDTO.setId(movie.getId());
+        movieDTO.setGenres(movie.getGenres());
         movieDTO.setOriginalTitle(movie.getOriginalTitle());
         movieDTO.setReleaseDate(movie.getReleaseDate());
         movieDTO.setVoteAverage(movie.getVoteAverage());

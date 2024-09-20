@@ -1,5 +1,6 @@
 package app.dtos;
 
+import app.entities.Genre;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Purpose:
@@ -30,9 +32,6 @@ public class MovieDTO {
     @JsonIgnore
     private List<DirectorDTO> directors = new ArrayList<>();
 
-    @JsonProperty("genre_ids")
-    private List<Integer> genreIds;
-
     @JsonProperty("original_title")
     private String originalTitle;
 
@@ -44,4 +43,7 @@ public class MovieDTO {
 
     @JsonIgnore
     private List<ActorDTO> cast = new ArrayList<>();
+
+    @JsonProperty("genre_ids")
+    private List<Integer> genres = new ArrayList<>();
 }
