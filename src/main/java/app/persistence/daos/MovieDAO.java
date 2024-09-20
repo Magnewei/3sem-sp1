@@ -35,31 +35,18 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         emf = entityManagerFactory;
     }
 
-    @Transactional
-    public void persistGenres(List<Genre> genres) {
-        if (genres == null || genres.isEmpty()) return;
-
-        try (var em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-
-            for (Genre genre : genres) {
-                List<Genre> existingGenres = em.createQuery("SELECT g FROM Genre g WHERE g.genre = :genreName", Genre.class)
-                        .setParameter("genreName", genre.getGenre())
-                        .getResultList();
-
-                if (existingGenres.isEmpty()) {
-                    // Save the genre if it's not in the database & flush to clear the queue.
-                    em.persist(genre);
-                    em.flush();
-                }
-            }
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            throw new JpaException("Could not persist genres. " + e.getMessage());
-        }
-    }
-
-    // Updated create method to ensure genres are managed before movie is saved
+    /**
+     * Creates a new movie record in the database, ensuring that associated genres are managed and persisted first.
+     * The method first converts the incoming {@link MovieDTO} into a {@link Movie} entity, persists the genres,
+     * and then merges the movie entity with managed genres to prevent transient object exceptions.
+     *
+     * This approach ensures that all genres associated with the movie are in a managed state before the movie is saved.
+     * The method manually manages transactions to control the order and success of the operations.
+     *
+     * @param movieDTO the {@link MovieDTO} object containing the movie details to be created.
+     * @return the created {@link MovieDTO} with the updated movie ID set.
+     * @throws JpaException if the movie already exists or if any error occurs during the creation process.
+     */
     @Override
     public MovieDTO create(MovieDTO movieDTO) {
         Movie movie = toEntity(movieDTO);
@@ -69,6 +56,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
 
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
+
             // Attach managed genres to the movie to avoid transient object exceptions
             List<Genre> managedGenres = new ArrayList<>();
             for (Genre genre : movie.getGenres()) {
@@ -79,7 +67,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
             }
             movie.setGenres(managedGenres);
 
-            em.merge(movie);  // Merge ensures both new and existing entities are managed properly
+            em.merge(movie);
             em.getTransaction().commit();
 
             movieDTO.setId(movie.getId());
@@ -207,6 +195,40 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
 
         } catch (Exception e) {
             throw new JpaException("Could not get top-10 lowest rated movies." + e.getMessage());
+        }
+    }
+
+    /**
+     * Persists a list of genres into the database. If a genre already exists, it will not be duplicated.
+     * This method first checks if the genres are already present in the database by querying by genre name.
+     * If not found, it persists the genre and flushes to clear the queue.
+     *
+     * The transaction is managed manually to ensure that all changes are committed together.
+     *
+     * @param genres the list of {@link Genre} objects to persist; if the list is null or empty, the method returns immediately.
+     * @throws JpaException if any error occurs during the persistence process, encapsulating the error message.
+     */
+    @Transactional
+    public void persistGenres(List<Genre> genres) {
+        if (genres == null || genres.isEmpty()) return;
+
+        try (var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            for (Genre genre : genres) {
+                List<Genre> existingGenres = em.createQuery("SELECT g FROM Genre g WHERE g.genre = :genreName", Genre.class)
+                        .setParameter("genreName", genre.getGenre())
+                        .getResultList();
+
+                if (existingGenres.isEmpty()) {
+                    // Save the genre if it's not in the database & flush to clear the queue.
+                    em.persist(genre);
+                    em.flush();
+                }
+            }
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            throw new JpaException("Could not persist genres. " + e.getMessage());
         }
     }
 

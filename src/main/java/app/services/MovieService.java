@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 /**
  * Service class for managing movies, including fetching, sorting, and saving movies to the database.
  * This service interacts with the API and the database layer to provide movie data.
- *
  */
 @NoArgsConstructor
 public class MovieService {
@@ -32,7 +31,7 @@ public class MovieService {
     /**
      * Gets the singleton instance of the MovieService, initializing the DAO and API service if not already done.
      *
-     * @param emf             the EntityManagerFactory used by MovieDAO
+     * @param emf the EntityManagerFactory used by MovieDAO
      * @return the singleton instance of MovieService
      */
     public static synchronized MovieService getInstance(EntityManagerFactory emf) {
@@ -50,11 +49,31 @@ public class MovieService {
      * @return a list of MovieDTOs sorted by their original title
      */
     public List<MovieDTO> sortByTitle() {
-        List<MovieDTO> allMovies = movieDAO.getAll();
-        allMovies.stream()
-                .sorted(Comparator.comparing(MovieDTO::getOriginalTitle))
-                .forEach(System.out::println);
-        return allMovies;
+        try {
+            List<MovieDTO> allMovies = movieDAO.getAll();
+            allMovies.stream()
+                    .sorted(Comparator.comparing(MovieDTO::getOriginalTitle))
+                    .forEach(System.out::println);
+            return allMovies;
+        } catch (JpaException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Calculates and returns the average rating of all movies.
+     *
+     * @return the average rating of movies, or 0 if an exception occurs
+     */
+    public double getAvgRatingOfMovies() {
+        try {
+            double avgRating = movieDAO.getTotalAverageRating();
+            return avgRating;
+        } catch (JpaException e) {
+            System.err.println(e.getMessage());
+            return 0;
+        }
     }
 
     /**
@@ -64,9 +83,45 @@ public class MovieService {
      * @return a list of MovieDTOs that match the given title
      */
     public List<MovieDTO> searchByTitle(String title) {
-        List<MovieDTO> allMovies = movieDAO.getMoviesByTitle(title);
+        try {
+            List<MovieDTO> allMovies = movieDAO.getMoviesByTitle(title);
+            return allMovies;
+        } catch (JpaException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
 
-        return allMovies;
+    }
+
+    /**
+     * Retrieves and returns the bottom ten movies with the lowest ratings.
+     *
+     * @return a list of the ten lowest-rated MovieDTOs
+     */
+    public List<MovieDTO> getBottomTenMovies() {
+        try {
+            List<MovieDTO> allMovies = movieDAO.getTop10LowestRatedMovies();
+            return allMovies;
+        } catch (JpaException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Retrieves and returns the top ten movies with the highest ratings.
+     *
+     * @return a list of the ten highest-rated MovieDTOs
+     */
+    public List<MovieDTO> getTopTenMovies() {
+        try {
+            List<MovieDTO> allMovies = movieDAO.getTop10HighestRatedMovies();
+            return allMovies;
+        } catch (JpaException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+
     }
 
     /**
@@ -97,7 +152,7 @@ public class MovieService {
     }
 
     /**
-     * Filters and prints movies that include a specific director in their cast.
+     * Filters and prints movies that include a specific director.
      *
      * @param director the director to filter movies by
      * @return a list of MovieDTOs that include the specified director
@@ -124,7 +179,7 @@ public class MovieService {
             Set<ActorDTO> uniqueActors = new HashSet<>();
             Set<DirectorDTO> uniqueDirectors = new HashSet<>();
 
-           movies.parallelStream().forEach(movie -> {;
+            movies.parallelStream().forEach(movie -> {
 
                 // Filter out duplicate actors
                 List<ActorDTO> filteredActors = movie.getCast().stream()
