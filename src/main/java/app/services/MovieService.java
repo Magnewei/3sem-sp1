@@ -58,18 +58,6 @@ public class MovieService {
     }
 
     /**
-     * Searches for movies by their original title.
-     *
-     * @param title the title to search for
-     * @return a list of MovieDTOs that match the given title
-     */
-    public List<MovieDTO> searchByTitle(String title) {
-        List<MovieDTO> allMovies = movieDAO.getMoviesByTitle(title);
-
-        return allMovies;
-    }
-
-    /**
      * Sorts and prints all movies by their release date in ascending order.
      *
      * @return a list of MovieDTOs sorted by their release date
@@ -112,6 +100,7 @@ public class MovieService {
 
     /**
      * Fetches movies from the API, filters out duplicate actors and directors, and saves the movies to the database.
+     *
      * This method uses sets to ensure that only unique actors and directors are added to each movie.
      *
      * @throws JpaException if there is an error persisting movies to the database
@@ -124,7 +113,7 @@ public class MovieService {
             Set<ActorDTO> uniqueActors = new HashSet<>();
             Set<DirectorDTO> uniqueDirectors = new HashSet<>();
 
-           movies.parallelStream().forEach(movie -> {;
+            movies.parallelStream().forEach(movie -> {
 
                 // Filter out duplicate actors
                 List<ActorDTO> filteredActors = movie.getCast().stream()
@@ -141,7 +130,6 @@ public class MovieService {
 
                 movieDAO.create(movie);
             });
-
         } catch (URISyntaxException | InterruptedException | IOException e) {
             System.err.println(e.getMessage());
             throw new JpaException("Could not persist movies to the database.");
