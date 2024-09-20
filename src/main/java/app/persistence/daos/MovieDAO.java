@@ -9,6 +9,7 @@ import app.entities.Movie;
 import app.exceptions.JpaException;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
      * @throws JpaException if the movie already exists or there is an error creating the movie.
      */
     @Override
-    public void create(MovieDTO movieDTO) {
+    public MovieDTO create(MovieDTO movieDTO) {
         Movie movie = toEntity(movieDTO);
 
         try (var em = emf.createEntityManager()) {
@@ -46,12 +47,13 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
             em.persist(movie);
             em.getTransaction().commit();
 
+            movieDTO.setId(movie.getId());
         } catch (EntityExistsException e) {
             throw new JpaException("Movie already exists.");
-
         } catch (Exception e) {
             throw new JpaException("Could not create movie.");
         }
+        return movieDTO;
     }
 
     /**
@@ -88,11 +90,13 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
             Movie movie = em.createQuery("SELECT m FROM Movie m WHERE m.id = :id", Movie.class)
                     .setParameter("id", id)
                     .getSingleResult();
-
             return toDTO(movie);
 
+        } catch (NoResultException e) {
+            // Return null if no movie is found
+            return null;
         } catch (Exception e) {
-            throw new JpaException("Could not find movie.");
+            throw new JpaException("Could not find movie. " + e.getMessage());
         }
     }
 
@@ -144,6 +148,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         if (dto == null) return null;
 
         Movie movie = new Movie();
+        movie.setId(dto.getId());
         movie.setOriginalTitle(dto.getOriginalTitle());
         movie.setReleaseDate(dto.getReleaseDate());
         movie.setVoteAverage(dto.getVoteAverage());

@@ -20,15 +20,27 @@ public class MovieDAOTest {
     private static EntityManagerFactory emfTest;
     private static EntityManager entityManager;
 
+    private static MovieDTO movieDTO;
+
     @BeforeAll
     static void setUpAll() {
         emfTest = HibernateConfig.getEntityManagerFactoryConfig(HibernateConfigState.TEST);
         movieDAO = new MovieDAO(emfTest);
         entityManager = emfTest.createEntityManager();
+        movieDTO = MovieDTO.builder()
+                .originalTitle("Test Movie")
+                .releaseDate(LocalDate.of(2023, 9, 20))
+                .voteAverage(8.5)
+                .cast(List.of(ActorDTO.builder().name("Test Actor").gender(1).build()))
+                .directors(List.of(DirectorDTO.builder().name("Test Director").gender(1).build()))
+                .build();
+        movieDAO.create(movieDTO);
+
     }
 
     @AfterAll
     public static void tearDown() {
+        movieDAO.delete(movieDTO);
         entityManager.close();
         emfTest.close();
     }
@@ -43,10 +55,12 @@ public class MovieDAOTest {
                 .directors(List.of(DirectorDTO.builder().name("Test Director").gender(1).build()))
                 .build();
 
-        Assertions.assertDoesNotThrow(() -> movieDAO.create(movieDTO));
+        // Persist the movie and get the updated MovieDTO with ID
+        MovieDTO persistedMovieDTO = movieDAO.create(movieDTO);
 
         entityManager.getTransaction().begin();
-        Movie retrievedMovie = entityManager.find(Movie.class, movieDTO.getId());
+        MovieDTO getDtoFromID = movieDAO.getById(persistedMovieDTO.getId());
+        Movie retrievedMovie = movieDAO.toEntity(getDtoFromID);
         entityManager.getTransaction().commit();
 
         assertNotNull(retrievedMovie, "Movie should be persisted and retrievable.");
@@ -81,19 +95,22 @@ public class MovieDAOTest {
     @Test
     public void testDeleteMovie() {
         MovieDTO movieDTO = MovieDTO.builder()
-                .originalTitle("Delete Test Movie")
-                .releaseDate(LocalDate.of(2022, 10, 1))
-                .voteAverage(6.5)
+                .originalTitle("Test Delete")
+                .releaseDate(LocalDate.of(2023, 9, 20))
+                .voteAverage(8.5)
                 .build();
 
-        movieDAO.create(movieDTO);
+        // Persist the movie
+        MovieDTO persistedMovieDTO = movieDAO.create(movieDTO);
 
-        Movie persistedMovie = entityManager.find(Movie.class, movieDTO.getId());
-        assertNotNull(persistedMovie, "Movie should exist before deletion.");
+        // Delete the movie
+        entityManager.getTransaction().begin();
+        movieDAO.delete(persistedMovieDTO);
+        entityManager.getTransaction().commit();
 
-        Assertions.assertDoesNotThrow(() -> movieDAO.delete(movieDTO));
+        // Refetch to check deletion
+        MovieDTO deletedMovie = movieDAO.getById(persistedMovieDTO.getId());
 
-        Movie deletedMovie = entityManager.find(Movie.class, movieDTO.getId());
-        assertNull(deletedMovie, "Movie should be deleted and not retrievable.");
+        assertNull(deletedMovie, "Movie should be null after deletion.");
     }
 }
