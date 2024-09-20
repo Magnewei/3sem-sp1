@@ -3,7 +3,7 @@ package app.persistence.daos;
 import java.util.List;
 
 public interface GenericDAO<T, E> {
-    void create(T type);
+    T create(T type);
     void delete(T type);
     T getById(int id);
     List<T> getAll();
