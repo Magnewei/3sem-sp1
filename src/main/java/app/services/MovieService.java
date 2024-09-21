@@ -121,7 +121,6 @@ public class MovieService {
             System.err.println(e.getMessage());
             return null;
         }
-
     }
 
     /**
