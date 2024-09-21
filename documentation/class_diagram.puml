@@ -1,5 +1,26 @@
 @startuml sp1
 
+' Styling
+skinparam FontSize 14
+skinparam FontStyle bold
+skinparam linetype ortho
+skinparam ArrowThickness 3
+skinparam ArrowColor Green
+
+skinparam package {
+    BackgroundColor LightYellow
+    BorderColor Black
+    FontColor Black
+    HeaderFontColor Black
+    HeaderFontSize 14
+    HeaderFontStyle bold
+    HeaderBackgroundColor LightYellow
+    Shadowing false
+    RoundCorner 10
+}
+' End Styling
+
+' Data sources
 component TMDB_API [
 The Movie Database API
 ]
@@ -7,13 +28,9 @@ The Movie Database API
 database Database [
 Postgres Database
 ]
+' End Data sources
 
-' Styling
-skinparam ArrowThickness 3
-skinparam linetype ortho
-skinparam ArrowColor Green
-'
-
+' Packages
 package "dtos" {
     class ActorDTO {
         - id: int
@@ -38,6 +55,13 @@ package "dtos" {
         + releaseDate: LocalDate
         + voteAverage: double
         - cast: List<ActorDTO>
+        - genres: List<GenreDTO>
+    }
+
+    class GenreDTO {
+        + id: int
+        + genreName: String
+        - movies: List<MovieDTO>
     }
 }
 
@@ -64,10 +88,15 @@ package "entities" {
         + voteAverage: double
         + cast: List<Actor>
         + directors: List<Director>
+        + genres: List<Genre>
+    }
+
+    class Genre {
+        + id: int
+        + genre: String
+        + movies: List<Movie>
     }
 }
-
-
 
 package "exceptions" {
     class ApiException {
@@ -98,6 +127,11 @@ package "daos" {
         + update(MovieDTO movieDTO)
         + toEntity(MovieDTO dto): Movie
         + toDTO(Movie movie): MovieDTO
+        + getTotalAverageRating(): double
+        + getTop10LowestRatedMovies(): List<MovieDTO>
+        + getTop10HighestRatedMovies(): List<MovieDTO>
+        + getMoviesByTitle(String title): List<MovieDTO>
+        + persistGenres(List<Genre>): void
     }
 }
 
@@ -119,6 +153,7 @@ package "services" {
         + saveMoviesToDatabase(): void
     }
 }
+' End Packages
 
 TMDB_API --> ApiService : Uses
 GenericDAO --> Database : Manages
@@ -130,5 +165,9 @@ JpaException <|-- MovieDAO : Throws
 ApiException <|-- ApiService : Throws
 Movie --> Actor
 Movie --> Director
+Movie --> Genre
+MovieDTO --> GenreDTO
+ActorDTO --> MovieDTO : Part of
+DirectorDTO --> MovieDTO : Part of
 
 @enduml
