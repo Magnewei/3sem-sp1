@@ -6,6 +6,8 @@ import app.dtos.MovieDTO;
 import app.entities.Actor;
 import app.entities.Director;
 import app.exceptions.JpaException;
+import app.persistence.daos.ActorDAO;
+import app.persistence.daos.DirectorDAO;
 import app.persistence.daos.MovieDAO;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.NoArgsConstructor;
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class MovieService {
     private static MovieDAO movieDAO;
+    private static ActorDAO actorDAO;
+    private static DirectorDAO directorDAO;
     private static MovieService instance;
     private static ApiService apiService;
 
@@ -37,7 +41,9 @@ public class MovieService {
     public static synchronized MovieService getInstance(EntityManagerFactory emf) {
         if (instance == null) {
             instance = new MovieService();
-            movieDAO = new MovieDAO(emf);
+            actorDAO = new ActorDAO(emf);
+            directorDAO = new DirectorDAO(emf);
+            movieDAO = new MovieDAO(emf,actorDAO,directorDAO);
             apiService = ApiService.getInstance();
         }
         return instance;

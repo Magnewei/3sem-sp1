@@ -25,14 +25,18 @@ import java.util.stream.Collectors;
  */
 public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
     private final EntityManagerFactory emf;
+    private final ActorDAO actorDAO;
+    private final DirectorDAO directorDAO;
 
     /**
      * Constructs a MovieDAO with the given EntityManagerFactory.
      *
      * @param entityManagerFactory the {@link EntityManagerFactory} used for managing entities.
      */
-    public MovieDAO(EntityManagerFactory entityManagerFactory) {
-        emf = entityManagerFactory;
+    public MovieDAO(EntityManagerFactory emf, ActorDAO actorDAO, DirectorDAO directorDAO) {
+        this.emf = emf;
+        this.actorDAO = actorDAO;
+        this.directorDAO = directorDAO;
     }
 
     /**
@@ -50,9 +54,10 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
     @Override
     public MovieDTO create(MovieDTO movieDTO) {
         Movie movie = toEntity(movieDTO);
+        GenreDAO genreDAO = new GenreDAO(emf);
 
         // Persist genres first to ensure they are managed
-        persistGenres(movie.getGenres());
+        genreDAO.persistGenres(movie.getGenres());
 
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -67,7 +72,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
             }
             movie.setGenres(managedGenres);
 
-            em.merge(movie);
+            em.persist(movie);
             em.getTransaction().commit();
 
             movieDTO.setId(movie.getId());
@@ -111,14 +116,8 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
     @Override
     public MovieDTO getById(int id) {
         try (var em = emf.createEntityManager()) {
-            Movie movie = em.createQuery("SELECT m FROM Movie m WHERE m.id = :id", Movie.class)
-                    .setParameter("id", id)
-                    .getSingleResult();
-            return toDTO(movie);
-
-        } catch (NoResultException e) {
-            // Return null if no movie is found
-            return null;
+            Movie movie = em.find(Movie.class, id);
+            return movie != null ? toDTO(movie) : null;
         } catch (Exception e) {
             throw new JpaException("Could not find movie. " + e.getMessage());
         }
@@ -199,40 +198,6 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
     }
 
     /**
-     * Persists a list of genres into the database. If a genre already exists, it will not be duplicated.
-     * This method first checks if the genres are already present in the database by querying by genre name.
-     * If not found, it persists the genre and flushes to clear the queue.
-     *
-     * The transaction is managed manually to ensure that all changes are committed together.
-     *
-     * @param genres the list of {@link Genre} objects to persist; if the list is null or empty, the method returns immediately.
-     * @throws JpaException if any error occurs during the persistence process, encapsulating the error message.
-     */
-    @Transactional
-    public void persistGenres(List<Genre> genres) {
-        if (genres == null || genres.isEmpty()) return;
-
-        try (var em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-
-            for (Genre genre : genres) {
-                List<Genre> existingGenres = em.createQuery("SELECT g FROM Genre g WHERE g.genre = :genreName", Genre.class)
-                        .setParameter("genreName", genre.getGenre())
-                        .getResultList();
-
-                if (existingGenres.isEmpty()) {
-                    // Save the genre if it's not in the database & flush to clear the queue.
-                    em.persist(genre);
-                    em.flush();
-                }
-            }
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            throw new JpaException("Could not persist genres. " + e.getMessage());
-        }
-    }
-
-    /**
      * Gets the top-10 highest rated movies in the database.
      *
      * @return a list of the top-10 highest rated movies.
@@ -291,7 +256,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         // Set cast
         if (dto.getCast() != null) {
             List<Actor> actors = dto.getCast().stream()
-                    .map(this::toActor)
+                    .map(actorDAO::toEntity)
                     .collect(Collectors.toList());
             movie.setCast(actors);
         }
@@ -299,7 +264,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         // Set director(s)
         if (dto.getDirectors() != null) {
             List<Director> directors = dto.getDirectors().stream()
-                    .map(this::toDirector)
+                    .map(directorDAO::toEntity)
                     .collect(Collectors.toList());
             movie.setDirectors(directors);
         }
@@ -307,10 +272,11 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         // Set genres. Using a normal loop for readability, due to conversion from Integer to an object.
         if (dto.getGenres() != null && !dto.getGenres().isEmpty()) {
             List<Genre> genres = new ArrayList<>();
+            GenreDAO genreDAO = new GenreDAO(emf);
 
             for (Integer genreDTO : dto.getGenres()) {
                 Genre genre = new Genre();
-                genre.setGenre(getGenreNameById(genreDTO));
+                genre.setGenre(genreDAO.getGenreNameById(genreDTO));
                 genres.add(genre);
             }
 
@@ -318,73 +284,6 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         }
 
         return movie;
-    }
-
-    private Genre toGenre(GenreDTO dto) {
-        if (dto == null) return null;
-
-        // Do not persist the ID of the entity.
-        Genre genre = new Genre();
-        genre.setGenre(dto.getGenreName());
-        return genre;
-    }
-
-    private String getGenreNameById(int id) {
-        return switch (id) {
-            case 28 -> "ACTION";
-            case 12 -> "ADVENTURE";
-            case 16 -> "ANIMATION";
-            case 35 -> "COMEDY";
-            case 80 -> "CRIME";
-            case 99 -> "DOCUMENTARY";
-            case 18 -> "DRAMA";
-            case 10751 -> "FAMILY";
-            case 14 -> "FANTASY";
-            case 36 -> "HISTORY";
-            case 27 -> "HORROR";
-            case 10402 -> "MUSIC";
-            case 9648 -> "MYSTERY";
-            case 10749 -> "ROMANCE";
-            case 878 -> "SCIENCE_FICTION";
-            case 10770 -> "TV_MOVIE";
-            case 53 -> "THRILLER";
-            case 10752 -> "WAR";
-            case 37 -> "WESTERN";
-            default -> throw new IllegalArgumentException("No genre found with ID: " + id);
-        };
-    }
-
-
-    /**
-     * Converts an ActorDTO to an Actor entity.
-     *
-     * @param dto the {@link ActorDTO} object to convert.
-     * @return the converted {@link Actor} entity.
-     */
-    private Actor toActor(ActorDTO dto) {
-        if (dto == null) return null;
-
-        Actor actor = new Actor();
-        actor.setName(dto.getName());
-
-        if (dto.getGender() != 0) actor.setGender(dto.getGender());
-
-        return actor;
-    }
-
-    /**
-     * Converts a DirectorDTO to a Director entity.
-     *
-     * @param dto the {@link DirectorDTO} object to convert.
-     * @return the converted {@link Director} entity.
-     */
-    private Director toDirector(DirectorDTO dto) {
-        if (dto == null) return null;
-
-        Director director = new Director();
-        director.setName(dto.getName());
-        director.setGender(dto.getGender());
-        return director;
     }
 
     /**
@@ -406,40 +305,23 @@ public class MovieDAO implements GenericDAO<MovieDTO, Movie> {
         dto.setReleaseDate(movie.getReleaseDate());
         dto.setVoteAverage(movie.getVoteAverage());
 
-        return dto;
-    }
-
-    /**
-     * Converts an Actor entity to an ActorDTO.
-     *
-     * @param actor the {@link Actor} entity to convert.
-     * @return the converted {@link ActorDTO} object.
-     */
-    public ActorDTO toActorDTO(Actor actor) {
-        if (actor == null) return null;
-
-        ActorDTO dto = new ActorDTO();
-        if (dto.getId() != 0) {
-            dto.setId(actor.getId());
+        // Set cast
+        if (movie.getCast() != null) {
+            List<ActorDTO> actors = movie.getCast().stream()
+                    .map(actorDAO::toDTO)
+                    .collect(Collectors.toList());
+            dto.setCast(actors);
         }
 
-        dto.setName(actor.getName());
-        dto.setGender(actor.getGender());
+        //Set directors
+        if (movie.getDirectors() != null) {
+            List<DirectorDTO> directors = movie.getDirectors().stream()
+                    .map(directorDAO::toDTO)
+                    .collect(Collectors.toList());
+            dto.setDirectors(directors);
+        }
+
         return dto;
     }
 
-    /**
-     * Converts a Director entity to a DirectorDTO.
-     *
-     * @param director the {@link Director} entity to convert.
-     * @return the converted {@link DirectorDTO} object.
-     */
-    public DirectorDTO toDirectorDTO(Director director) {
-        if (director == null) return null;
-
-        DirectorDTO dto = new DirectorDTO();
-        dto.setName(director.getName());
-        dto.setGender(director.getGender());
-        return dto;
-    }
 }
