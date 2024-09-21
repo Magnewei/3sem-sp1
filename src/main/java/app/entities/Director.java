@@ -6,16 +6,10 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Purpose:
- *
- * @Author: Anton Friis Stengaard
- */
 @Entity
 @Data
 @Table(name = "directors")
 public class Director {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +21,7 @@ public class Director {
     @Column(name = "gender")
     private int gender;
 
-    @ManyToMany(mappedBy = "directors", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "directors")
     @Column(name = "knownFor")
     private List<Movie> knownFor = new ArrayList<>();
 

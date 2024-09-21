@@ -2,6 +2,7 @@ package app.persistence;
 
 import app.entities.Actor;
 import app.entities.Director;
+import app.entities.Genre;
 import app.entities.Movie;
 import app.enums.HibernateConfigState;
 import jakarta.persistence.EntityManagerFactory;
@@ -22,6 +23,7 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Movie.class);
         configuration.addAnnotatedClass(Director.class);
         configuration.addAnnotatedClass(Actor.class);
+        configuration.addAnnotatedClass(Genre.class);
     }
 
     private static EntityManagerFactory getEntityManagerFactory(Configuration configuration, Properties props) {
@@ -55,13 +57,11 @@ public class HibernateConfig {
             props.put("hibernate.connection.url", System.getenv("DEPLOYED_DB_URL"));
             props.put("hibernate.connection.username", System.getenv("DEPLOYED_DB_USERNAME"));
             props.put("hibernate.connection.password", System.getenv("DEPLOYED_DB_PASSWORD"));
-/*
+            /*
             props.put("hibernate.show_sql", "true"); // show sql in console
             props.put("hibernate.format_sql", "true"); // format sql in console
             props.put("hibernate.use_sql_comments", "true"); // show sql comments in console
-
-
- */
+            */
             props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect"); // dialect for postgresql
             props.put("hibernate.connection.driver_class", "org.postgresql.Driver"); // driver class for postgresql
             props.put("hibernate.archive.autodetection", "class"); // hibernate scans for annotated classes
