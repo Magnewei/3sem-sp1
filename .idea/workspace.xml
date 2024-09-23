@@ -54,22 +54,23 @@
       </list>
     </option>
   </component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Magnewei/3sem-sp1.git",
-    "accountId": "e36e67f0-7d59-4b5e-a2a2-1c0ce19ecfcb"
+
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Magnewei/3sem-sp1&quot;,
+    &quot;accountId&quot;: &quot;a5e1d5c9-a7cb-4beb-9b2f-a6bd662c4e06&quot;
   },
-  "recentNewPullRequestHead": {
-    "server": {
-      "useHttp": false,
-      "host": "github.com",
-      "port": null,
-      "suffix": null
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
     },
-    "owner": "Magnewei",
-    "repository": "3sem-sp1"
+    &quot;owner&quot;: &quot;Magnewei&quot;,
+    &quot;repository&quot;: &quot;3sem-sp1&quot;
   }
-}]]></component>
+}</component>
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="true" />
   </component>
@@ -93,7 +94,8 @@
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;flereDAOS&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#25 on search__by__title&quot;,
+
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
@@ -137,6 +139,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.MovieDAOTest" />
         <item itemvalue="JUnit.MovieDAOTest" />
       </list>
     </recent_temporary>
