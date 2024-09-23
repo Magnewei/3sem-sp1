@@ -75,7 +75,7 @@ public class MovieDAOTest {
                 .cast(List.of(ActorDTO.builder().name("Test Actor").gender(1).build()))
                 .directors(List.of(DirectorDTO.builder().name("Test Director").gender(1).build()))
                 .build();
-
+        
         // Persist the movie and get the updated MovieDTO with ID
         MovieDTO persistedMovieDTO = movieDAO.create(movieDTO);
 
